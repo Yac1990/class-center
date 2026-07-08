@@ -1,0 +1,290 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String    @id @default(cuid())
+  email           String    @unique
+  name            String
+  password        String
+  role            String    @default("CLIENT") // ADMIN, AGENT, CABINE_MANAGER, CLIENT, LOYAL_CLIENT
+  phone           String?
+  cabineId        String?   // si c'est un client d'une cabine
+  actionCount     Int       @default(0) // nombre d'actions (recharges + souscriptions)
+  isLoyal         Boolean   @default(false) // client fidèle après 2 actions
+  loyaltyTier     String    @default("NONE") // NONE, BRONZE, SILVER, GOLD, PLATINUM
+  loyaltyUnlockedAt DateTime? // when they reached 5 ops >5000F
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  recharges       Recharge[]
+  subscriptions   Subscription[]
+  transactions    Transaction[]
+  promoCodes      PromoCode[]
+  flashOrders     FlashOrder[]
+  cabine          CabineManager?  @relation(fields: [cabineId], references: [id])
+}
+
+model Recharge {
+  id            String   @id @default(cuid())
+  clientName    String
+  phone         String
+  operator      String   // ORANGE, MTN, MOOV
+  amount        Int      // en FCFA
+  status        String   @default("PENDING") // PENDING, COMPLETED, FAILED
+  commission    Int      @default(0) // montant commission en FCFA
+  userId        String?
+  cabineId      String?
+  createdAt     DateTime @default(now())
+
+  user          User?    @relation(fields: [userId], references: [id])
+  cabine        CabineManager? @relation(fields: [cabineId], references: [id])
+}
+
+model Subscription {
+  id            String   @id @default(cuid())
+  clientName    String
+  phone         String
+  operator      String   // ORANGE, MTN, MOOV
+  planName      String   // nom du forfait
+  amount        Int      // en FCFA
+  status        String   @default("PENDING")
+  commission    Int      @default(0)
+  userId        String?
+  cabineId      String?
+  createdAt     DateTime @default(now())
+
+  user          User?    @relation(fields: [userId], references: [id])
+  cabine        CabineManager? @relation(fields: [cabineId], references: [id])
+}
+
+model CabineManager {
+  id              String   @id @default(cuid())
+  email           String   @unique
+  name            String
+  password        String
+  inviteToken     String   @unique
+  theme           String   @default("default") // default, ocean, sunset, forest, royal
+  businessName    String   @default("")
+  waveNumber      String?  // numéro Wave pour recevoir les dépôts
+  monthlyFee      Int      @default(5000)
+  active          Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  clients         User[]
+  recharges       Recharge[]
+  subscriptions   Subscription[]
+  transactions    Transaction[]
+  publications    Publication[]
+  simBalances     SIMBalance[]
+  wavePayments    WavePayment[]
+}
+
+model Publication {
+  id              String    @id @default(cuid())
+  title           String
+  content         String
+  operator        String?   // ORANGE, MTN, MOOV ou null pour tous
+  type            String    @default("PROMO") // PROMO, BONUS, INFO, SERVICE
+  serviceCategory String?   // Catégorie de service: FLYERS, CARTES_INVITATION, IMPRESSION, PHOTO, PLASTIFICATION, SCAN, AUTRE
+  imageUrl        String    @default("") // URL de l'image (pour les services)
+  isNew           Boolean   @default(false) // Badge NEW scintillant
+  cabineId        String?   // null = publication globale (admin)
+  active          Boolean   @default(true)
+  expiresAt       DateTime? // date d'échéance (optionnelle)
+  createdAt       DateTime  @default(now())
+
+  cabine          CabineManager? @relation(fields: [cabineId], references: [id])
+}
+
+model SubscriptionPlan {
+  id            String   @id @default(cuid())
+  operator      String   // ORANGE, MTN, MOOV
+  name          String   // nom du forfait
+  amount        Int      // en FCFA
+  description   String   @default("")
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model SIMBalance {
+  id                 String   @id @default(cuid())
+  operator           String   // ORANGE, MTN, MOOV
+  phoneNumber        String
+  balance            Int      @default(0) // solde en FCFA
+  transactionNumbers String   @default("") // numéros de transaction / codes de recharge (séparés par des virgules)
+  cabineId           String?  // null = SIM de l'admin principal
+  lastRecharge       DateTime?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  cabine             CabineManager? @relation(fields: [cabineId], references: [id])
+}
+
+model WavePayment {
+  id            String   @id @default(cuid())
+  clientName    String
+  clientPhone   String
+  amount        Int      // en FCFA
+  status        String   @default("PENDING") // PENDING, CONFIRMED, CANCELLED
+  cabineId      String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  cabine        CabineManager @relation(fields: [cabineId], references: [id])
+}
+
+model CardSection {
+  id            String   @id @default(cuid())
+  title         String   // titre de la section (ex: "Cartes Orange", "Cartes MTN")
+  guideMessage  String   @default("") // message guide pour le client
+  position      Int      @default(0) // position d'affichage sur la page d'accueil
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  cards         PhysicalCard[]
+}
+
+model PhysicalCard {
+  id            String   @id @default(cuid())
+  name          String   // nom de la carte (ex: Carte Orange 500F)
+  description   String   @default("") // description
+  price         Int      // prix en FCFA
+  imageUrl      String   @default("") // URL de la photo de la carte
+  operator      String   @default("ALL") // ORANGE, MTN, MOOV, ALL
+  active        Boolean  @default(true)
+  stock         Int      @default(-1) // -1 = illimité
+  sectionId     String?  // section à laquelle appartient la carte
+  position      Int      @default(0) // position dans la section
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  section       CardSection? @relation(fields: [sectionId], references: [id])
+}
+
+model Transaction {
+  id              String   @id @default(cuid())
+  reference       String   @unique // unique reference like "CC-20250305-A1B2"
+  clientName      String   @default("") // nom du client
+  phone           String   // phone number to recharge
+  operator        String   // ORANGE, MTN, MOOV
+  amount          Int      // in FCFA
+  paymentMethod   String   // WAVE, DJAMO
+  type            String   @default("RECHARGE") // RECHARGE, SUBSCRIPTION, PHYSICAL_CARD, FLASH_ORDER
+  planName        String?  // for subscriptions
+  cardName        String?  // for physical card purchases
+  cardId          String?  // linked physical card ID
+  status          String   @default("PAYMENT_PENDING") // PAYMENT_PENDING, PAYMENT_CONFIRMED, PROCESSING, COMPLETED, FAILED
+  commission      Int      @default(0)
+  userId          String?
+  cabineId        String?
+  rechargeId      String?  // linked recharge record
+  subscriptionId  String?  // linked subscription record
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user            User?          @relation(fields: [userId], references: [id])
+  cabine          CabineManager? @relation(fields: [cabineId], references: [id])
+}
+
+model FlashProduct {
+  id            String   @id @default(cuid())
+  name          String   // nom du produit
+  description   String   @default("") // description détaillée
+  price         Int      // prix en FCFA
+  originalPrice Int      @default(0) // prix original (avant réduction)
+  images        String   @default("") // URLs des images séparées par des virgules (max 5)
+  category      String   @default("general") // catégorie du produit
+  stock         Int      @default(-1) // -1 = illimité
+  active        Boolean  @default(true)
+  featured      Boolean  @default(false) // produit mis en avant
+  position      Int      @default(0) // position d'affichage
+  likes         Int      @default(0) // nombre de likes/favoris
+  saleEndsAt    DateTime? // date de fin de la vente flash
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  orders        FlashOrder[]
+}
+
+model FlashOrder {
+  id            String   @id @default(cuid())
+  productId     String   // produit commandé
+  clientName    String   // nom du client
+  clientPhone   String   // téléphone du client
+  deliveryAddress String @default("") // adresse de livraison
+  deliveryCity  String   @default("") // ville de livraison
+  quantity      Int      @default(1) // quantité commandée
+  amount        Int      // montant total en FCFA
+  status        String   @default("PENDING") // PENDING, CONFIRMED, SHIPPED, DELIVERED, CANCELLED
+  note          String   @default("") // note du client
+  userId        String?  // utilisateur ayant passé la commande
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  product       FlashProduct @relation(fields: [productId], references: [id])
+  user          User?        @relation(fields: [userId], references: [id])
+}
+
+model PromotionalEmail {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String   @default("")
+  source    String   @default("FLASH_ORDER") // FLASH_ORDER, NEWSLETTER, MANUAL
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+// ==========================================
+// DOCUMENT REQUESTS (Documents à Traiter)
+// Permet aux clients d'envoyer leurs documents
+// pour services bureautiques et informatiques
+// ==========================================
+model DocumentRequest {
+  id              String   @id @default(cuid())
+  trackingCode    String   @unique // code de suivi type DOC-XXXXXX
+  // Infos client
+  clientName      String
+  clientPhone     String
+  clientEmail     String   @default("")
+  deliveryAddress String   @default("")
+  // Détails de la demande
+  serviceType     String   // TRAITEMENT_TEXTE, SAISIE, MISE_EN_PAGE, CORRECTION, CV_LETTRE, MEMOIRE_RAPPORT, DOC_ADMIN, IMPRESSION, NUMERISATION, PHOTOCOPIE, CONCEPTION, AUTRE
+  serviceTypeOther String  @default("") // précision si "Autre"
+  deliveryMode    String   // DIGITAL, PHYSICAL, PICKUP
+  description     String   @default("") // description détaillée du besoin
+  files           String   @default("[]") // JSON: [{url, name, size, type}]
+  // Devis / traitement admin
+  status          String   @default("RECEIVED") // RECEIVED, IN_PROGRESS, AWAITING_PAYMENT, COMPLETED, DELIVERED, CANCELLED
+  quoteAmount     Int?     // montant du devis en FCFA
+  quoteDelay      String   @default("") // délai estimé
+  quoteNote       String   @default("") // note du devis
+  finalDocumentUrl String  @default("") // URL du document final livré
+  adminNote       String   @default("") // note interne admin
+  // Métadonnées
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model PromoCode {
+  id          String    @id @default(cuid())
+  code        String    @unique // e.g., "CASH-5K-A1B2C3"
+  amount      Int       // cashback amount in FCFA (5000, 10000, 25000)
+  threshold   Int       // the loyalty threshold that triggered this (25, 50, 100)
+  status      String    @default("ACTIVE") // ACTIVE, USED, EXPIRED
+  userId      String    // the user who earned it
+  usedAt      DateTime?
+  expiresAt   DateTime? // optional expiry
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user        User      @relation(fields: [userId], references: [id])
+}

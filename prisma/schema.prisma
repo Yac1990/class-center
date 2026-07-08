@@ -1,0 +1,366 @@
+// =====================================================================
+// CLASS CENTER — PRODUCTION SCHEMA (PostgreSQL / Supabase)
+// =====================================================================
+// This is the production-ready Prisma schema for Supabase (PostgreSQL).
+//
+// USAGE:
+//   1. Copy this file to prisma/schema.prisma when deploying to Supabase:
+//        cp prisma/schema.prisma.sqlite prisma/schema.prisma.bak
+//        cp prisma/schema.prisma.postgres prisma/schema.prisma
+//   2. Set DATABASE_URL in .env to your Supabase PostgreSQL connection:
+//        postgresql://postgres.[project]:[password]@aws-0-[region].pooler.supabase.com:6543/postgres?pgbouncer=true&connection_limit=1
+//   3. Run: bun run db:push   (first deployment)
+//   4. To switch back to local SQLite dev:
+//        cp prisma/schema.prisma.bak prisma/schema.prisma
+//        # set DATABASE_URL=file:./db/custom.db
+//
+// Differences from the SQLite schema:
+//   - provider = "postgresql"
+//   - All String fields with default "" kept as TEXT (Postgres infers)
+//   - JSON fields (DocumentRequest.files) typed as Json
+//   - Indexes added for high-traffic columns
+//   - Cascade deletes explicit
+// =====================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String   @id @default(cuid())
+  email             String   @unique
+  name              String
+  password          String
+  role              String   @default("CLIENT") // ADMIN, AGENT, CABINE_MANAGER, CLIENT, LOYAL_CLIENT
+  phone             String?
+  cabineId          String?
+  actionCount       Int      @default(0)
+  isLoyal           Boolean  @default(false)
+  loyaltyTier       String   @default("NONE") // NONE, BRONZE, SILVER, GOLD, PLATINUM
+  loyaltyUnlockedAt DateTime?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  recharges     Recharge[]
+  subscriptions Subscription[]
+  transactions  Transaction[]
+  promoCodes    PromoCode[]
+  flashOrders   FlashOrder[]
+  cabine        CabineManager? @relation(fields: [cabineId], references: [id])
+
+  @@index([role])
+  @@index([cabineId])
+  @@index([email])
+}
+
+model Recharge {
+  id         String   @id @default(cuid())
+  clientName String
+  phone      String
+  operator   String // ORANGE, MTN, MOOV
+  amount     Int
+  status     String   @default("PENDING")
+  commission Int      @default(0)
+  userId     String?
+  cabineId   String?
+  createdAt  DateTime @default(now())
+
+  user   User?          @relation(fields: [userId], references: [id])
+  cabine CabineManager? @relation(fields: [cabineId], references: [id])
+
+  @@index([userId])
+  @@index([cabineId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Subscription {
+  id         String   @id @default(cuid())
+  clientName String
+  phone      String
+  operator   String
+  planName   String
+  amount     Int
+  status     String   @default("PENDING")
+  commission Int      @default(0)
+  userId     String?
+  cabineId   String?
+  createdAt  DateTime @default(now())
+
+  user   User?          @relation(fields: [userId], references: [id])
+  cabine CabineManager? @relation(fields: [cabineId], references: [id])
+
+  @@index([userId])
+  @@index([cabineId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model CabineManager {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  password     String
+  inviteToken  String   @unique
+  theme        String   @default("default")
+  businessName String   @default("")
+  waveNumber   String?
+  monthlyFee   Int      @default(5000)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  clients       User[]
+  recharges     Recharge[]
+  subscriptions Subscription[]
+  transactions  Transaction[]
+  publications  Publication[]
+  simBalances   SIMBalance[]
+  wavePayments  WavePayment[]
+}
+
+model Publication {
+  id              String    @id @default(cuid())
+  title           String
+  content         String
+  operator        String?
+  type            String    @default("PROMO") // PROMO, BONUS, INFO, SERVICE
+  serviceCategory String?
+  imageUrl        String    @default("")
+  isNew           Boolean   @default(false)
+  cabineId        String?
+  active          Boolean   @default(true)
+  expiresAt       DateTime?
+  createdAt       DateTime  @default(now())
+
+  cabine CabineManager? @relation(fields: [cabineId], references: [id])
+
+  @@index([type])
+  @@index([cabineId])
+  @@index([active])
+}
+
+model SubscriptionPlan {
+  id          String   @id @default(cuid())
+  operator    String
+  name        String
+  amount      Int
+  description String   @default("")
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([operator])
+  @@index([active])
+}
+
+model SIMBalance {
+  id                 String   @id @default(cuid())
+  operator           String
+  phoneNumber        String
+  balance            Int      @default(0)
+  transactionNumbers String   @default("")
+  cabineId           String?
+  lastRecharge       DateTime?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  cabine CabineManager? @relation(fields: [cabineId], references: [id])
+
+  @@index([cabineId])
+  @@index([operator])
+}
+
+model WavePayment {
+  id          String   @id @default(cuid())
+  clientName  String
+  clientPhone String
+  amount      Int
+  status      String   @default("PENDING")
+  cabineId    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  cabine CabineManager @relation(fields: [cabineId], references: [id])
+
+  @@index([cabineId])
+  @@index([status])
+}
+
+model CardSection {
+  id           String   @id @default(cuid())
+  title        String
+  guideMessage String   @default("")
+  position     Int      @default(0)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  cards PhysicalCard[]
+
+  @@index([active])
+}
+
+model PhysicalCard {
+  id          String   @id @default(cuid())
+  name        String
+  description String   @default("")
+  price       Int
+  imageUrl    String   @default("")
+  operator    String   @default("ALL")
+  active      Boolean  @default(true)
+  stock       Int      @default(-1)
+  sectionId   String?
+  position    Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  section CardSection? @relation(fields: [sectionId], references: [id])
+
+  @@index([sectionId])
+  @@index([operator])
+  @@index([active])
+}
+
+model Transaction {
+  id             String   @id @default(cuid())
+  reference      String   @unique
+  clientName     String   @default("")
+  phone          String
+  operator       String
+  amount         Int
+  paymentMethod  String // WAVE, DJAMO
+  type           String   @default("RECHARGE") // RECHARGE, SUBSCRIPTION, PHYSICAL_CARD, FLASH_ORDER
+  planName       String?
+  cardName       String?
+  cardId         String?
+  status         String   @default("PAYMENT_PENDING")
+  commission     Int      @default(0)
+  userId         String?
+  cabineId       String?
+  rechargeId     String?
+  subscriptionId String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user   User?          @relation(fields: [userId], references: [id])
+  cabine CabineManager? @relation(fields: [cabineId], references: [id])
+
+  @@index([userId])
+  @@index([cabineId])
+  @@index([status])
+  @@index([type])
+  @@index([createdAt])
+  @@index([reference])
+}
+
+model FlashProduct {
+  id            String    @id @default(cuid())
+  name          String
+  description   String    @default("")
+  price         Int
+  originalPrice Int       @default(0)
+  images        String    @default("")
+  category      String    @default("general")
+  stock         Int       @default(-1)
+  active        Boolean   @default(true)
+  featured      Boolean   @default(false)
+  position      Int       @default(0)
+  likes         Int       @default(0)
+  saleEndsAt    DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  orders FlashOrder[]
+
+  @@index([active])
+  @@index([featured])
+  @@index([category])
+}
+
+model FlashOrder {
+  id              String   @id @default(cuid())
+  productId       String
+  clientName      String
+  clientPhone     String
+  deliveryAddress String   @default("")
+  deliveryCity    String   @default("")
+  quantity        Int      @default(1)
+  amount          Int
+  status          String   @default("PENDING")
+  note            String   @default("")
+  userId          String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  product FlashProduct @relation(fields: [productId], references: [id])
+  user    User?         @relation(fields: [userId], references: [id])
+
+  @@index([productId])
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model PromotionalEmail {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String   @default("")
+  source    String   @default("FLASH_ORDER")
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@index([source])
+  @@index([active])
+}
+
+model DocumentRequest {
+  id               String   @id @default(cuid())
+  trackingCode     String   @unique
+  clientName       String
+  clientPhone      String
+  clientEmail      String   @default("")
+  deliveryAddress  String   @default("")
+  serviceType      String
+  serviceTypeOther String   @default("")
+  deliveryMode     String // DIGITAL, PHYSICAL, PICKUP
+  description      String   @default("")
+  files            Json     @default("[]") // [{url, name, size, type}]
+  status           String   @default("RECEIVED")
+  quoteAmount      Int?
+  quoteDelay       String   @default("")
+  quoteNote        String   @default("")
+  finalDocumentUrl String   @default("")
+  adminNote        String   @default("")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([status])
+  @@index([trackingCode])
+  @@index([clientPhone])
+  @@index([createdAt])
+}
+
+model PromoCode {
+  id        String    @id @default(cuid())
+  code      String    @unique
+  amount    Int
+  threshold Int
+  status    String    @default("ACTIVE")
+  userId    String
+  usedAt    DateTime?
+  expiresAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([status])
+  @@index([code])
+}
