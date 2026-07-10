@@ -3,8 +3,20 @@
   "version": "0.2.0",
   "private": true,
   "engines": {
-    "node": ">=20.0.0",
-    "npm": ">=10.0.0"
+    "node": ">=20.0.0"
+  },
+  "packageManager": "pnpm@10.26.1",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/client",
+      "@prisma/engines",
+      "prisma",
+      "sharp",
+      "@swc/core",
+      "@parcel/watcher",
+      "es5-ext",
+      "unrs-resolver"
+    ]
   },
   "scripts": {
     "dev": "next dev -p 5000",

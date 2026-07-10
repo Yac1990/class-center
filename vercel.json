@@ -1,5 +1,5 @@
 {
-  "installCommand": "npm install -g npm@10.9.2 && npm install --legacy-peer-deps --no-audit --no-fund --prefer-offline=false",
-  "buildCommand": "npm run vercel-build",
+  "installCommand": "pnpm install --no-frozen-lockfile",
+  "buildCommand": "pnpm run vercel-build",
   "framework": "nextjs"
 }
