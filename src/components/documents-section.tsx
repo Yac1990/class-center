@@ -470,7 +470,7 @@ function DocumentRequestOverlay({ open, onOpenChange }: DocumentRequestOverlayPr
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Choisissez un service…" />
                       </SelectTrigger>
-                      <SelectContent className="max-h-72">
+                      <SelectContent className="max-h-72 z-[110]">
                         {SERVICE_OPTIONS.map((opt) => (
                           <SelectItem key={opt.value} value={opt.value}>
                             <span className="flex items-center gap-2">
