@@ -3,10 +3,7 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  FileText, Upload, X, CheckCircle2, Loader2, Send, Search,
-  FileType2, FileImage, FileArchive, FileCheck, FilePlus2,
-  Trash2, ArrowRight, Sparkles, ShieldCheck, Truck, Mail,
-  Clock, Zap, Award, Smartphone, MapPin, Hash,
+  Upload, X, Loader2, Search, Trash2,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -24,18 +21,18 @@ import { toast } from 'sonner'
 // ==========================================
 
 const SERVICE_OPTIONS = [
-  { value: 'TRAITEMENT_TEXTE', label: 'Traitement de texte', icon: FileText },
-  { value: 'SAISIE', label: 'Saisie de documents manuscrits', icon: FilePlus2 },
-  { value: 'MISE_EN_PAGE', label: 'Mise en page professionnelle', icon: Sparkles },
-  { value: 'CORRECTION', label: 'Correction de documents', icon: FileCheck },
-  { value: 'CV_LETTRE', label: 'CV et lettre de motivation', icon: FileText },
-  { value: 'MEMOIRE_RAPPORT', label: 'Mémoire, rapport, thèse', icon: FileText },
-  { value: 'DOC_ADMIN', label: 'Documents administratifs', icon: FileText },
-  { value: 'IMPRESSION', label: 'Impression de documents', icon: FileText },
-  { value: 'NUMERISATION', label: 'Numérisation (scan)', icon: FileImage },
-  { value: 'PHOTOCOPIE', label: 'Photocopie', icon: FileText },
-  { value: 'CONCEPTION', label: 'Conception de documents personnalisés', icon: Sparkles },
-  { value: 'AUTRE', label: 'Autre', icon: FileText },
+  { value: 'TRAITEMENT_TEXTE', label: 'Traitement de texte', description: 'Mise en forme professionnelle de tous vos documents.' },
+  { value: 'SAISIE', label: 'Saisie de documents manuscrits', description: 'Conversion rapide en document numérique.' },
+  { value: 'MISE_EN_PAGE', label: 'Mise en page professionnelle', description: 'Présentation élégante et conforme.' },
+  { value: 'CORRECTION', label: 'Correction de documents', description: 'Orthographe, grammaire et mise en forme.' },
+  { value: 'CV_LETTRE', label: 'CV et lettre de motivation', description: 'Des documents professionnels pour réussir vos candidatures.' },
+  { value: 'MEMOIRE_RAPPORT', label: 'Mémoire, rapport, thèse', description: 'Respect des normes académiques.' },
+  { value: 'DOC_ADMIN', label: 'Documents administratifs', description: 'Courriers, attestations et formulaires.' },
+  { value: 'IMPRESSION', label: 'Impression de documents', description: 'Impression couleur et noir & blanc.' },
+  { value: 'NUMERISATION', label: 'Numérisation (scan)', description: 'Scan haute qualité avec livraison numérique.' },
+  { value: 'PHOTOCOPIE', label: 'Photocopie', description: 'Reproduction fidèle de vos documents.' },
+  { value: 'CONCEPTION', label: 'Conception de documents personnalisés', description: 'Créations sur mesure selon vos besoins.' },
+  { value: 'AUTRE', label: 'Autre', description: 'Un besoin spécifique ? Parlons-en.' },
 ] as const
 
 const DELIVERY_MODES = [
@@ -43,19 +40,16 @@ const DELIVERY_MODES = [
     value: 'DIGITAL',
     label: 'Livraison numérique',
     desc: 'WhatsApp, Email ou téléchargement',
-    icon: Mail,
   },
   {
     value: 'PHYSICAL',
     label: 'Livraison physique à domicile',
     desc: 'Nous livrons à votre adresse',
-    icon: Truck,
   },
   {
     value: 'PICKUP',
     label: 'Retrait dans nos locaux',
     desc: 'Récupérez votre commande chez nous',
-    icon: MapPin,
   },
 ] as const
 
@@ -73,10 +67,7 @@ function formatFileSize(bytes: number): string {
 }
 
 function getFileIcon(name: string) {
-  const ext = name.split('.').pop()?.toLowerCase()
-  if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'].includes(ext || '')) return FileImage
-  if (['zip', 'rar', '7z'].includes(ext || '')) return FileArchive
-  return FileType2
+  return null
 }
 
 // ==========================================
@@ -87,100 +78,108 @@ export function DocumentsSection() {
   const [trackingOpen, setTrackingOpen] = useState(false)
 
   return (
-    <section id="section-documents" className="py-16 sm:py-20 bg-gradient-to-br from-cc-orange-light via-cc-page-bg to-cc-blue-light relative overflow-hidden">
-      {/* Decorative blobs */}
-      <div className="absolute -top-20 -right-20 w-72 h-72 bg-cc-orange/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-20 -left-20 w-72 h-72 bg-cc-blue/10 rounded-full blur-3xl pointer-events-none" />
+    <section id="section-documents" className="relative py-24 sm:py-32 bg-cc-page-bg overflow-hidden">
+      {/* Ambient background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-cc-page-bg via-cc-surface-container-high to-cc-page-bg pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[36rem] h-[36rem] bg-cc-orange/[0.06] rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[30rem] h-[30rem] bg-cc-blue/[0.05] rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/3 left-1/4 w-72 h-72 bg-cc-orange/[0.03] rounded-full blur-[100px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 relative">
+        <div className="grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr] gap-14 lg:gap-20 items-center">
           {/* LEFT: text */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
-            <Badge className="mb-4 bg-cc-orange/10 text-cc-orange border-cc-orange/20 hover:bg-cc-orange/15">
-              <FileText className="w-3.5 h-3.5 mr-1.5" />
-              Documents à Traiter
-            </Badge>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-cc-text-primary mb-4 leading-tight">
-              Confiez-nous vos documents <span className="text-cc-orange">en toute simplicité</span>
+            <span className="inline-flex items-center px-4 py-1.5 rounded-full text-[11px] font-semibold tracking-[0.12em] uppercase text-cc-text-secondary bg-cc-surface-container border border-cc-border/70 shadow-sm mb-7">
+              Documents à traiter
+            </span>
+
+            <h2 className="text-4xl sm:text-5xl lg:text-[3.4rem] font-semibold text-cc-text-primary mb-6 leading-[1.08] tracking-tight">
+              Confiez-nous vos documents{' '}
+              <span className="text-cc-orange">en toute simplicité</span>
             </h2>
-            <p className="text-base sm:text-lg text-cc-text-secondary mb-6 leading-relaxed">
+
+            <p className="text-lg text-cc-text-secondary/90 mb-9 leading-relaxed max-w-lg font-light">
               Envoyez vos documents en ligne et notre équipe se charge du reste : saisie,
               traitement de texte, mise en page, impression, correction, numérisation et bien
               plus encore.
             </p>
 
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-8">
+            <div className="flex flex-wrap gap-2.5 mb-10">
               {[
-                { icon: Zap, text: 'Traitement rapide' },
-                { icon: Award, text: 'Service professionnel' },
-                { icon: Truck, text: 'Livraison numérique ou physique' },
-                { icon: Clock, text: 'Suivi de votre commande en temps réel' },
-                { icon: ShieldCheck, text: 'Paiement sécurisé' },
-              ].map((item) => (
-                <li key={item.text} className="flex items-center gap-2.5 text-sm text-cc-text-primary">
-                  <span className="flex items-center justify-center w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/30 shrink-0">
-                    <item.icon className="w-3.5 h-3.5 text-green-600 dark:text-green-400" />
-                  </span>
-                  <span className="font-medium">{item.text}</span>
-                </li>
+                'Traitement rapide',
+                'Livraison numérique ou physique',
+                'Paiement sécurisé',
+                'Service professionnel',
+                'Suivi en temps réel',
+              ].map((text) => (
+                <span
+                  key={text}
+                  className="text-[13px] font-medium text-cc-text-primary/80 bg-cc-surface-container border border-cc-border/60 rounded-full px-4 py-2 shadow-[0_1px_2px_rgba(0,0,0,0.03)]"
+                >
+                  {text}
+                </span>
               ))}
-            </ul>
+            </div>
 
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Button
-                size="lg"
+            <div className="flex flex-col sm:flex-row gap-3.5">
+              <motion.button
+                whileHover={{ y: -2, boxShadow: '0 16px 32px -8px rgba(255,122,26,0.38)' }}
+                whileTap={{ y: 0, scale: 0.98 }}
+                transition={{ duration: 0.25, ease: 'easeOut' }}
                 onClick={() => setOverlayOpen(true)}
-                className="bg-gradient-to-r from-cc-orange to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg shadow-cc-orange/20 h-12 px-7 text-base font-semibold"
+                className="bg-cc-orange text-white rounded-2xl h-[52px] px-8 text-[15px] font-semibold shadow-[0_10px_24px_-6px_rgba(255,122,26,0.35)]"
               >
-                <Send className="w-5 h-5 mr-2" />
                 Envoyer mon document
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
+              </motion.button>
+              <motion.button
+                whileHover={{ backgroundColor: 'rgba(59,130,246,0.06)', borderColor: 'rgba(59,130,246,0.35)' }}
+                transition={{ duration: 0.25, ease: 'easeOut' }}
                 onClick={() => setTrackingOpen(true)}
-                className="border-cc-border text-cc-text-primary hover:bg-cc-surface-container-high h-12 px-6 text-base"
+                className="bg-cc-surface-container border border-cc-border text-cc-text-primary rounded-2xl h-[52px] px-8 text-[15px] font-semibold"
               >
-                <Search className="w-5 h-5 mr-2" />
                 Suivre ma demande
-              </Button>
+              </motion.button>
             </div>
           </motion.div>
 
           {/* RIGHT: service cards grid */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.15 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {SERVICE_OPTIONS.slice(0, 9).map((opt, i) => (
                 <motion.div
                   key={opt.value}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.05 * i, duration: 0.4 }}
-                  whileHover={{ y: -4 }}
-                  className="bg-cc-surface-container border border-cc-border rounded-xl p-3 flex flex-col items-center text-center gap-2 cursor-pointer transition-shadow hover:shadow-md"
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ delay: 0.06 * i, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  whileHover={{ y: -5 }}
                   onClick={() => setOverlayOpen(true)}
+                  className="group cursor-pointer bg-cc-surface-container border border-cc-border/70 rounded-[22px] px-6 py-8 flex flex-col items-center text-center gap-2.5 shadow-[0_1px_3px_rgba(0,0,0,0.03)] transition-all duration-300 hover:shadow-[0_18px_40px_-14px_rgba(0,0,0,0.12)] hover:border-cc-orange/40 hover:bg-cc-orange/[0.04]"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cc-orange/15 to-cc-blue/15 flex items-center justify-center">
-                    <opt.icon className="w-5 h-5 text-cc-orange" />
-                  </div>
-                  <span className="text-xs font-medium text-cc-text-primary leading-tight">{opt.label}</span>
+                  <h3 className="text-[15px] font-semibold text-cc-text-primary leading-snug">
+                    {opt.label}
+                  </h3>
+                  <p className="text-[13px] text-cc-text-secondary/80 leading-relaxed font-light">
+                    {opt.description}
+                  </p>
                 </motion.div>
               ))}
             </div>
-            <p className="text-center text-xs text-cc-text-secondary mt-3">
-              + Impression, photocopie, conception personnalisée…
-            </p>
+            <div className="flex justify-center mt-6">
+              <span className="inline-flex items-center text-[13px] font-medium text-cc-text-secondary bg-cc-surface-container border border-dashed border-cc-border rounded-full px-5 py-2">
+                + Photocopie, conception personnalisée et bien plus encore
+              </span>
+            </div>
           </motion.div>
         </div>
       </div>
@@ -395,11 +394,8 @@ function DocumentRequestOverlay({ open, onOpenChange }: DocumentRequestOverlayPr
             className="bg-cc-surface-container rounded-2xl shadow-2xl w-full max-w-3xl my-4 sm:my-8 border border-cc-border"
           >
             {/* Header */}
-            <div className="sticky top-0 z-10 bg-gradient-to-r from-cc-orange to-orange-600 text-white px-5 sm:px-6 py-4 rounded-t-2xl flex items-center justify-between">
+            <div className="sticky top-0 z-10 bg-gradient-to-r from-cc-orange to-cc-orange/90 text-white px-5 sm:px-6 py-4 rounded-t-2xl flex items-center justify-between">
               <div className="flex items-center gap-3 min-w-0">
-                <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center shrink-0">
-                  <FileText className="w-5 h-5" />
-                </div>
                 <div className="min-w-0">
                   <h2 className="text-lg sm:text-xl font-bold truncate">Envoyer un document</h2>
                   <p className="text-xs sm:text-sm text-white/80 truncate">Confiez-nous vos documents en toute simplicité</p>
@@ -425,7 +421,7 @@ function DocumentRequestOverlay({ open, onOpenChange }: DocumentRequestOverlayPr
               ) : (
                 <div className="space-y-6">
                   {/* Section: Informations client */}
-                  <FormSection title="Vos informations" icon={FileText}>
+                  <FormSection title="Vos informations">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-1.5">
                         <Label htmlFor="doc-name">Nom et prénom <span className="text-red-500">*</span></Label>
@@ -469,7 +465,7 @@ function DocumentRequestOverlay({ open, onOpenChange }: DocumentRequestOverlayPr
                   </FormSection>
 
                   {/* Section: Type de service */}
-                  <FormSection title="Type de service demandé" icon={Sparkles}>
+                  <FormSection title="Type de service demandé">
                     <Select value={serviceType} onValueChange={setServiceType}>
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Choisissez un service…" />
@@ -478,7 +474,6 @@ function DocumentRequestOverlay({ open, onOpenChange }: DocumentRequestOverlayPr
                         {SERVICE_OPTIONS.map((opt) => (
                           <SelectItem key={opt.value} value={opt.value}>
                             <span className="flex items-center gap-2">
-                              <opt.icon className="w-4 h-4 text-cc-orange" />
                               {opt.label}
                             </span>
                           </SelectItem>
@@ -496,7 +491,7 @@ function DocumentRequestOverlay({ open, onOpenChange }: DocumentRequestOverlayPr
                   </FormSection>
 
                   {/* Section: Mode de livraison */}
-                  <FormSection title="Mode de livraison" icon={Truck}>
+                  <FormSection title="Mode de livraison">
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                       {DELIVERY_MODES.map((mode) => (
                         <button
@@ -509,7 +504,6 @@ function DocumentRequestOverlay({ open, onOpenChange }: DocumentRequestOverlayPr
                               : 'border-cc-border hover:border-cc-orange/40 bg-cc-surface-container'
                           }`}
                         >
-                          <mode.icon className={`w-5 h-5 mb-2 ${deliveryMode === mode.value ? 'text-cc-orange' : 'text-cc-text-secondary'}`} />
                           <p className={`text-sm font-semibold mb-0.5 ${deliveryMode === mode.value ? 'text-cc-orange' : 'text-cc-text-primary'}`}>
                             {mode.label}
                           </p>
@@ -522,7 +516,6 @@ function DocumentRequestOverlay({ open, onOpenChange }: DocumentRequestOverlayPr
                   {/* Section: Téléchargement des fichiers */}
                   <FormSection
                     title="Téléchargement des fichiers"
-                    icon={Upload}
                     badge={`${files.length}/${MAX_FILES} fichiers`}
                   >
                     <div
@@ -568,22 +561,18 @@ function DocumentRequestOverlay({ open, onOpenChange }: DocumentRequestOverlayPr
                     {files.length > 0 && (
                       <div className="mt-3 space-y-2 max-h-52 overflow-y-auto pr-1">
                         {files.map((f, idx) => {
-                          const Icon = getFileIcon(f.name)
                           return (
                             <div
                               key={`${f.url}-${idx}`}
                               className="flex items-center gap-3 p-2.5 rounded-lg bg-cc-surface-container-high border border-cc-border group"
                             >
-                              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-cc-blue/15 to-cc-orange/15 flex items-center justify-center shrink-0">
-                                <Icon className="w-4 h-4 text-cc-blue" />
-                              </div>
-                              <div className="flex-1 min-w-0">
+                              <div className="flex-1 min-w-0 px-2">
                                 <p className="text-sm font-medium text-cc-text-primary truncate">{f.name}</p>
                                 <p className="text-xs text-cc-text-secondary">{formatFileSize(f.size)}</p>
                               </div>
                               <button
                                 onClick={() => removeFile(idx)}
-                                className="p-1.5 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+                                className="p-1.5 rounded-lg hover:bg-red-500/10 text-red-500 transition-colors opacity-0 group-hover:opacity-100"
                                 aria-label="Retirer"
                               >
                                 <Trash2 className="w-4 h-4" />
@@ -596,7 +585,7 @@ function DocumentRequestOverlay({ open, onOpenChange }: DocumentRequestOverlayPr
                   </FormSection>
 
                   {/* Section: Description */}
-                  <FormSection title="Décrivez votre besoin" icon={FileText}>
+                  <FormSection title="Décrivez votre besoin">
                     <Textarea
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
@@ -621,7 +610,7 @@ function DocumentRequestOverlay({ open, onOpenChange }: DocumentRequestOverlayPr
                     <Button
                       onClick={handleSubmit}
                       disabled={step === 'submitting'}
-                      className="bg-gradient-to-r from-cc-orange to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg shadow-cc-orange/20 min-w-[200px]"
+                      className="bg-gradient-to-r from-cc-orange to-cc-orange/90 hover:from-cc-orange/90 hover:to-cc-orange text-white shadow-lg shadow-cc-orange/20 min-w-[200px]"
                     >
                       {step === 'submitting' ? (
                         <>
@@ -629,10 +618,7 @@ function DocumentRequestOverlay({ open, onOpenChange }: DocumentRequestOverlayPr
                           Envoi en cours…
                         </>
                       ) : (
-                        <>
-                          <Send className="w-4 h-4 mr-2" />
-                          Envoyer ma demande
-                        </>
+                        'Envoyer ma demande'
                       )}
                     </Button>
                   </div>
@@ -669,15 +655,6 @@ function SuccessScreen({
 
   return (
     <div className="py-6 text-center">
-      <motion.div
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ type: 'spring', damping: 12, stiffness: 200 }}
-        className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center shadow-lg shadow-green-500/30"
-      >
-        <CheckCircle2 className="w-11 h-11 text-white" />
-      </motion.div>
-
       <h3 className="text-2xl font-black text-cc-text-primary mb-2">
         Demande envoyée avec succès !
       </h3>
@@ -693,7 +670,6 @@ function SuccessScreen({
           Votre code de suivi
         </p>
         <div className="flex items-center gap-2">
-          <Hash className="w-5 h-5 text-cc-orange" />
           <span className="text-2xl sm:text-3xl font-black text-cc-orange tracking-wider font-mono">
             {trackingCode}
           </span>
@@ -704,21 +680,31 @@ function SuccessScreen({
           onClick={copyCode}
           className="mt-2 border-cc-border text-cc-text-primary"
         >
-          {copied ? <CheckCircle2 className="w-3.5 h-3.5 mr-1.5 text-green-600" /> : null}
           {copied ? 'Copié !' : 'Copier le code'}
         </Button>
       </div>
 
       <div className="bg-cc-surface-container-high rounded-xl p-4 mb-6 text-left max-w-md mx-auto">
-        <p className="text-sm font-semibold text-cc-text-primary mb-2 flex items-center gap-2">
-          <Clock className="w-4 h-4 text-cc-orange" />
+        <p className="text-sm font-semibold text-cc-text-primary mb-2">
           Prochaines étapes
         </p>
-        <ul className="text-xs text-cc-text-secondary space-y-1.5">
-          <li className="flex gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-green-500 shrink-0 mt-0.5" /> Votre demande est enregistrée</li>
-          <li className="flex gap-2"><Smartphone className="w-3.5 h-3.5 text-cc-blue shrink-0 mt-0.5" /> Vous recevrez un appel / message WhatsApp</li>
-          <li className="flex gap-2"><FileCheck className="w-3.5 h-3.5 text-cc-orange shrink-0 mt-0.5" /> Nous vous envoyons un devis avec prix & délai</li>
-          <li className="flex gap-2"><Truck className="w-3.5 h-3.5 text-cc-blue shrink-0 mt-0.5" /> Livraison numérique ou physique selon votre choix</li>
+        <ul className="text-xs text-cc-text-secondary space-y-2">
+          <li className="flex gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-cc-orange shrink-0 mt-1.5" />
+            Votre demande est enregistrée
+          </li>
+          <li className="flex gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-cc-blue shrink-0 mt-1.5" />
+            Vous recevrez un appel / message WhatsApp
+          </li>
+          <li className="flex gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-cc-orange shrink-0 mt-1.5" />
+            Nous vous envoyons un devis avec prix & délai
+          </li>
+          <li className="flex gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-cc-blue shrink-0 mt-1.5" />
+            Livraison numérique ou physique selon votre choix
+          </li>
         </ul>
       </div>
 
@@ -728,10 +714,9 @@ function SuccessScreen({
 
       <Button
         onClick={onClose}
-        className="bg-gradient-to-r from-cc-orange to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white"
+        className="bg-gradient-to-r from-cc-orange to-cc-orange/90 text-white"
       >
         Terminer
-        <ArrowRight className="w-4 h-4 ml-2" />
       </Button>
     </div>
   )
@@ -816,11 +801,8 @@ function DocumentTrackingDialog({
             exit={{ opacity: 0, scale: 0.96 }}
             className="bg-cc-surface-container rounded-2xl shadow-2xl w-full max-w-lg border border-cc-border overflow-hidden"
           >
-            <div className="bg-gradient-to-r from-cc-blue to-blue-700 text-white px-5 py-4 flex items-center justify-between">
+            <div className="bg-gradient-to-r from-cc-blue to-cc-blue/90 text-white px-5 py-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center">
-                  <Search className="w-5 h-5" />
-                </div>
                 <h2 className="text-lg font-bold">Suivre ma demande</h2>
               </div>
               <button
@@ -846,10 +828,10 @@ function DocumentTrackingDialog({
                 <Button
                   onClick={handleSearch}
                   disabled={loading}
-                  className="bg-gradient-to-r from-cc-blue to-blue-700 text-white shrink-0"
+                  className="bg-gradient-to-r from-cc-blue to-cc-blue/90 text-white shrink-0"
                 >
-                  {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
-                  <span className="ml-1.5 hidden sm:inline">Rechercher</span>
+                  {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+                  <span className={loading ? 'ml-1.5' : ''}>Rechercher</span>
                 </Button>
               </div>
 
@@ -879,11 +861,11 @@ function DocumentTrackingDialog({
 // ==========================================
 function TrackingResultCard({ data }: { data: any }) {
   const steps = [
-    { key: 'RECEIVED', label: 'Demande reçue', icon: CheckCircle2 },
-    { key: 'IN_PROGRESS', label: 'En cours de traitement', icon: Loader2 },
-    { key: 'AWAITING_PAYMENT', label: 'En attente de paiement', icon: FileText },
-    { key: 'COMPLETED', label: 'Terminé', icon: FileCheck },
-    { key: 'DELIVERED', label: 'Livré', icon: Truck },
+    { key: 'RECEIVED', label: 'Demande reçue' },
+    { key: 'IN_PROGRESS', label: 'En cours de traitement' },
+    { key: 'AWAITING_PAYMENT', label: 'En attente de paiement' },
+    { key: 'COMPLETED', label: 'Terminé' },
+    { key: 'DELIVERED', label: 'Livré' },
   ]
   const order = ['RECEIVED', 'IN_PROGRESS', 'AWAITING_PAYMENT', 'COMPLETED', 'DELIVERED']
   const currentIdx = order.indexOf(data.status)
@@ -898,8 +880,8 @@ function TrackingResultCard({ data }: { data: any }) {
         </div>
         <Badge className={
           isCancelled
-            ? 'bg-red-100 text-red-700 border-red-200'
-            : data.statusColor || 'bg-blue-100 text-blue-700 border-blue-200'
+            ? 'bg-red-500/10 text-red-500 border-red-500/20'
+            : 'bg-cc-blue/10 text-cc-blue border-cc-blue/20'
         }>
           {data.statusLabel || data.status}
         </Badge>
@@ -924,9 +906,8 @@ function TrackingResultCard({ data }: { data: any }) {
         <a
           href={data.finalDocumentUrl}
           download
-          className="flex items-center justify-center gap-2 w-full p-3 mb-4 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors text-sm font-semibold"
+          className="flex items-center justify-center gap-2 w-full p-3 mb-4 rounded-lg bg-cc-blue/10 text-cc-blue hover:bg-cc-blue/15 transition-colors text-sm font-semibold"
         >
-          <FileCheck className="w-4 h-4" />
           Télécharger votre document final
         </a>
       )}
@@ -939,18 +920,21 @@ function TrackingResultCard({ data }: { data: any }) {
             className="absolute left-4 top-4 w-0.5 bg-gradient-to-b from-cc-orange to-cc-blue transition-all duration-500"
             style={{ height: `calc(${(currentIdx / (order.length - 1)) * 100}% - 0px)` }}
           />
-          <div className="space-y-3">
+          <div className="space-y-4">
             {steps.map((s, i) => {
               const done = i <= currentIdx
-              const current = i === currentIdx
               return (
-                <div key={s.key} className="flex items-center gap-3 relative">
+                <div key={s.key} className="flex items-center gap-4 relative">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-colors ${
                     done
-                      ? 'bg-gradient-to-br from-cc-orange to-orange-600 text-white'
+                      ? 'bg-gradient-to-br from-cc-orange to-cc-blue text-white'
                       : 'bg-cc-surface-container border border-cc-border text-cc-text-secondary'
                   }`}>
-                    <s.icon className={`w-4 h-4 ${current && !done ? 'animate-pulse' : ''}`} />
+                    {done ? (
+                      <div className="w-2 h-2 rounded-full bg-white" />
+                    ) : (
+                      <div className="w-1.5 h-1.5 rounded-full bg-cc-text-secondary/30" />
+                    )}
                   </div>
                   <span className={`text-sm ${done ? 'font-semibold text-cc-text-primary' : 'text-cc-text-secondary'}`}>
                     {s.label}
@@ -970,12 +954,10 @@ function TrackingResultCard({ data }: { data: any }) {
 // ==========================================
 function FormSection({
   title,
-  icon: Icon,
   children,
   badge,
 }: {
   title: string
-  icon: any
   children: React.ReactNode
   badge?: string
 }) {
@@ -983,7 +965,6 @@ function FormSection({
     <div>
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-sm font-bold text-cc-text-primary flex items-center gap-2">
-          <Icon className="w-4 h-4 text-cc-orange" />
           {title}
         </h3>
         {badge && (

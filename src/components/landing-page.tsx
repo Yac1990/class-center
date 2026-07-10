@@ -2,10 +2,6 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import {
-  Zap, Shield, Star, ArrowRight, CreditCard, Radio, ShoppingCart, ChevronRight,
-  Sparkles, TrendingUp, Globe, Heart, Tag,
-} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -19,7 +15,6 @@ import { FlashCatalogOverlay } from '@/components/flash-catalog-overlay'
 
 import { AboutUsSection } from '@/components/about-us-section'
 import { DocumentsSection } from '@/components/documents-section'
-import { WhatsAppHelpCenterSection } from '@/components/whatsapp-help-center'
 
 // ==========================================
 // ANIMATED COUNTER
@@ -78,15 +73,15 @@ export function LandingPage({ heroIndex, onGoToClient }: { heroIndex: number; on
   ]
 
   // Service category labels
-  const serviceCategoryLabels: Record<string, { label: string; icon: string }> = {
-    FLYERS: { label: 'Flyers', icon: '📄' },
-    CARTES_INVITATION: { label: 'Cartes d\'invitation', icon: '💌' },
-    IMPRESSION: { label: 'Impression', icon: '🖨️' },
-    PHOTO: { label: 'Photo minute', icon: '📸' },
-    PLASTIFICATION: { label: 'Plastification', icon: '📋' },
-    SCAN: { label: 'Scan & Numérisation', icon: '📠' },
-    RELIURE: { label: 'Reliure', icon: '📕' },
-    AUTRE: { label: 'Autre service', icon: '✨' },
+  const serviceCategoryLabels: Record<string, { label: string }> = {
+    FLYERS: { label: 'Flyers' },
+    CARTES_INVITATION: { label: 'Cartes d\'invitation' },
+    IMPRESSION: { label: 'Impression' },
+    PHOTO: { label: 'Photo minute' },
+    PLASTIFICATION: { label: 'Plastification' },
+    SCAN: { label: 'Scan & Numérisation' },
+    RELIURE: { label: 'Reliure' },
+    AUTRE: { label: 'Autre service' },
   }
 
   return (
@@ -140,7 +135,6 @@ export function LandingPage({ heroIndex, onGoToClient }: { heroIndex: number; on
                   transition={{ duration: 2, repeat: Infinity }}
                 />
                 <span className="text-[11px] uppercase tracking-widest text-cc-yellow font-medium">Services Rapides</span>
-                <Sparkles className="w-3 h-3 text-cc-yellow" />
               </div>
             </motion.div>
 
@@ -181,7 +175,7 @@ export function LandingPage({ heroIndex, onGoToClient }: { heroIndex: number; on
                 className="bg-gradient-to-r from-orange-500 to-orange-600 text-white text-base px-8 h-12 btn-glow-orange"
                 onClick={onGoToClient}
               >
-                <Zap className="w-5 h-5 mr-2" /> Commander
+                Commander
               </Button>
               <Button
                 size="lg"
@@ -189,7 +183,7 @@ export function LandingPage({ heroIndex, onGoToClient }: { heroIndex: number; on
                 className="text-base px-8 h-12 border-cc-border text-cc-text-primary hover:bg-cc-surface-container-high hover:border-cc-text-secondary/20"
                 onClick={onGoToClient}
               >
-                Découvrir nos services <ArrowRight className="w-4 h-4 ml-1" />
+                Découvrir nos services
               </Button>
             </motion.div>
 
@@ -201,15 +195,8 @@ export function LandingPage({ heroIndex, onGoToClient }: { heroIndex: number; on
               transition={{ delay: 0.5 }}
             >
               <div className="flex items-center gap-1">
-            {[1,2,3,4,5].map(i => (
-                  <motion.span key={i}
-                    animate={{ rotate: [0, 10, -10, 0], scale: [1, 1.1, 1] }}
-                    transition={{ duration: 2, repeat: Infinity, delay: i * 0.1 }}
-                  >
-                    <Star className="w-4 h-4 fill-[#e9c400] text-[#e9c400]" />
-                  </motion.span>
-                ))}
-                <span className="text-sm text-cc-text-secondary ml-1">4.9/5</span>
+                <span className="text-sm font-bold text-cc-yellow">4.9/5</span>
+                <span className="text-sm text-cc-text-secondary">note moyenne</span>
               </div>
               {stats && (
                 <span className="text-sm text-cc-text-secondary">
@@ -300,28 +287,19 @@ export function LandingPage({ heroIndex, onGoToClient }: { heroIndex: number; on
                   {p.isNew && (
                     <div className="absolute top-2 right-2 z-20">
                       <motion.div
-                        className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-red-500 border-2 border-red-400 shadow-lg shadow-red-500/30"
-                        animate={{
-                          scale: [1, 1.08, 1],
-                          boxShadow: ['0 0 8px rgba(239,68,68,0.3)', '0 0 20px rgba(239,68,68,0.6)', '0 0 8px rgba(239,68,68,0.3)'],
-                        }}
+                        className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-cc-orange border-2 border-cc-orange/60 shadow-lg shadow-cc-orange/30"
+                        animate={{ scale: [1, 1.08, 1] }}
                         transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
                       >
-                        <motion.span
-                          animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.2, 1] }}
-                          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                        >
-                          <Sparkles className="w-3.5 h-3.5 text-yellow-300" />
-                        </motion.span>
                         <span className="text-[10px] font-black text-white uppercase tracking-wider">New</span>
                       </motion.div>
                     </div>
                   )}
 
-                  {/* Red glowing pulse on border for NEW items */}
+                  {/* Glowing pulse on border for NEW items */}
                   {p.isNew && (
                     <motion.div
-                      className="absolute inset-0 rounded-xl border-2 border-red-400 pointer-events-none"
+                      className="absolute inset-0 rounded-xl border-2 border-cc-orange/50 pointer-events-none"
                       animate={{ opacity: [0.3, 0.7, 0.3] }}
                       transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
                     />
@@ -336,12 +314,12 @@ export function LandingPage({ heroIndex, onGoToClient }: { heroIndex: number; on
                   <div className="relative z-10">
                     {isService ? (
                       <div className="flex items-center gap-2 mb-2">
-                        <Badge className="bg-gradient-to-r from-red-500 to-orange-500 text-white text-xs gap-1">
-                          <Tag className="w-3 h-3" /> SERVICE
+                        <Badge className="bg-cc-orange text-white text-xs">
+                          SERVICE
                         </Badge>
                         {serviceCat && (
-                          <Badge className="bg-orange-500/15 text-orange-400 border border-orange-500/25 text-xs">
-                            {serviceCat.icon} {serviceCat.label}
+                          <Badge className="bg-cc-orange/15 text-cc-orange border border-cc-orange/25 text-xs">
+                            {serviceCat.label}
                           </Badge>
                         )}
                       </div>
@@ -415,7 +393,7 @@ export function LandingPage({ heroIndex, onGoToClient }: { heroIndex: number; on
                 transition={{ delay: index * 0.15 }}
               >
                 <div className={`w-20 h-20 rounded-full ${info.bg} ${info.color} flex items-center justify-center shadow-lg animate-float`} style={{ animationDelay: `${index * 0.5}s` }}>
-                  <Radio className="w-8 h-8" />
+                  <span className="text-2xl font-black">{info.name?.[0]}</span>
                 </div>
                 <div className="text-center">
                   <p className="font-bold text-cc-text-primary">{info.name}</p>
@@ -443,9 +421,6 @@ export function LandingPage({ heroIndex, onGoToClient }: { heroIndex: number; on
       {/* About Us Section */}
       <AboutUsSection />
 
-      {/* WhatsApp Help Center */}
-      <WhatsAppHelpCenterSection />
-
       {/* Features */}
       <section id="section-features" className="py-16 sm:py-20 bg-cc-page-bg">
         <div className="max-w-[480px] md:max-w-7xl mx-auto px-4 sm:px-6">
@@ -462,10 +437,10 @@ export function LandingPage({ heroIndex, onGoToClient }: { heroIndex: number; on
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { icon: Zap, title: 'Rapide', desc: 'Services instantanés, pas d\'attente', color: 'from-orange-500 to-red-500' },
-              { icon: Shield, title: 'Sécurisé', desc: 'Vos données sont protégées', color: 'from-green-500 to-emerald-600' },
-              { icon: CreditCard, title: 'Paiement flexible', desc: 'Wave, Djamo ou paiement à la livraison', color: 'from-blue-500 to-indigo-600' },
-              { icon: ShoppingCart, title: 'E-commerce', desc: 'Produits, cartes, forfaits et services', color: 'from-purple-500 to-violet-600' },
+              { title: 'Rapide', desc: 'Services instantanés, pas d\'attente' },
+              { title: 'Sécurisé', desc: 'Vos données sont protégées' },
+              { title: 'Paiement flexible', desc: 'Wave, Djamo ou paiement à la livraison' },
+              { title: 'E-commerce', desc: 'Produits, cartes, forfaits et services' },
             ].map((f, i) => (
               <motion.div
                 key={f.title}
@@ -476,12 +451,9 @@ export function LandingPage({ heroIndex, onGoToClient }: { heroIndex: number; on
                 whileHover={{ y: -8, scale: 1.02 }}
               >
                 <Card className="glow-card h-full bg-cc-surface-container border border-cc-border rounded-2xl overflow-hidden relative group">
-                  {/* Animated gradient top border */}
-                  <div className={`h-1 bg-gradient-to-r ${f.color} transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500`} />
+                  {/* Animated brand-orange top border */}
+                  <div className="h-1 bg-cc-orange transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
                   <CardContent className="pt-6">
-                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${f.color} flex items-center justify-center mb-4 shadow-lg`}>
-                      <f.icon className="w-6 h-6 text-white" />
-                    </div>
                     <h3 className="font-bold text-lg mb-1 text-cc-text-primary">{f.title}</h3>
                     <p className="text-sm text-cc-text-secondary">{f.desc}</p>
                   </CardContent>
@@ -538,7 +510,6 @@ export function LandingPage({ heroIndex, onGoToClient }: { heroIndex: number; on
               animate={{ scale: [1, 1.05, 1] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <TrendingUp className="w-3.5 h-3.5 text-green-300" />
               <span className="text-[11px] uppercase tracking-widest text-white/80 font-medium">+2000 clients satisfaits</span>
             </motion.div>
             <h2 className="text-3xl sm:text-4xl font-black mb-4">
@@ -556,7 +527,7 @@ export function LandingPage({ heroIndex, onGoToClient }: { heroIndex: number; on
                 className="bg-white text-cc-blue hover:bg-blue-50 text-base px-10 h-12 font-bold btn-glow"
                 onClick={onGoToClient}
               >
-                Commander maintenant <ChevronRight className="w-5 h-5 ml-1" />
+                Commander maintenant
               </Button>
             </motion.div>
           </motion.div>

@@ -2,9 +2,6 @@
 
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import {
-  CreditCard, ShoppingCart, Sparkles, Eye,
-} from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -88,7 +85,6 @@ export function PhysicalCardsSection({ onSeeMore }: PhysicalCardsSectionProps = 
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-cc-surface-container-high to-cc-surface-container">
-                <CreditCard className="w-16 h-16 text-cc-text-secondary/20" />
               </div>
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
@@ -109,20 +105,18 @@ export function PhysicalCardsSection({ onSeeMore }: PhysicalCardsSectionProps = 
             {/* Two buttons: Acheter now + Add to cart */}
             <div className="flex gap-2">
               <Button
-                className="flex-1 bg-gradient-to-r from-cc-orange to-orange-600 text-white h-11 btn-glow-orange font-bold text-sm rounded-xl group-hover:shadow-lg transition-all duration-300"
+                className="flex-1 bg-gradient-to-r from-cc-orange to-cc-orange/90 text-white h-11 btn-glow-orange font-bold text-sm rounded-xl group-hover:shadow-lg transition-all duration-300"
                 onClick={() => handleBuyNow(card)}
               >
-                <ShoppingCart className="w-4 h-4 mr-1" />
                 Acheter
               </Button>
               <Button
                 variant="outline"
-                className="border-cc-orange/30 text-cc-orange hover:bg-orange-500/10 h-11 px-3 rounded-xl"
+                className="border-cc-orange/30 text-cc-orange hover:bg-cc-orange/10 h-11 px-3 rounded-xl"
                 onClick={() => handleAddToCart(card)}
                 title="Ajouter au panier"
               >
-                <ShoppingCart className="w-4 h-4" />
-                <Plus className="w-3 h-3 ml-0.5" />
+                +
               </Button>
             </div>
           </div>
@@ -157,7 +151,6 @@ export function PhysicalCardsSection({ onSeeMore }: PhysicalCardsSectionProps = 
           viewport={{ once: true }}
         >
           <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-cc-surface-container border border-cc-orange/20 rounded-full mb-4">
-            <Sparkles className="w-4 h-4 text-cc-orange" />
             <span className="text-[11px] uppercase tracking-widest text-cc-orange font-medium">Boutique</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-black text-cc-text-primary mb-3">
@@ -228,9 +221,8 @@ export function PhysicalCardsSection({ onSeeMore }: PhysicalCardsSectionProps = 
             className="border-cc-border text-cc-text-primary hover:bg-cc-surface-container-high hover:border-cc-orange/30 px-8 h-12 text-base gap-2 rounded-xl"
             onClick={onSeeMore}
           >
-            <Eye className="w-4 h-4" />
             Voir plus de produits
-            <Badge className="bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20 text-[10px] ml-1">
+            <Badge className="bg-cc-orange/10 text-cc-orange border-cc-orange/20 text-[10px] ml-1">
               {sections.reduce((acc: number, s: any) => acc + (s.cards?.length || 0), 0) + unassignedCards.length}
             </Badge>
           </Button>
@@ -240,11 +232,3 @@ export function PhysicalCardsSection({ onSeeMore }: PhysicalCardsSectionProps = 
   )
 }
 
-// Need Plus icon for the add-to-cart button
-function Plus({ className }: { className?: string }) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-      <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
-    </svg>
-  )
-}

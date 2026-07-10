@@ -2,19 +2,19 @@
 
 import React, { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, ChevronRight, Package } from 'lucide-react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { formatCurrency } from '@/lib/commissions'
 
 // Category display helpers
 const CATEGORY_COLORS: Record<string, string> = {
-  general: 'bg-gray-500/15 text-gray-500 dark:text-gray-400',
-  electronics: 'bg-blue-500/15 text-blue-600 dark:text-blue-400',
-  fashion: 'bg-pink-500/15 text-pink-600 dark:text-pink-400',
-  phone: 'bg-cyan-500/15 text-cyan-600 dark:text-cyan-400',
-  food: 'bg-green-500/15 text-green-600 dark:text-green-400',
-  beauty: 'bg-purple-500/15 text-purple-600 dark:text-purple-400',
-  home: 'bg-amber-500/15 text-amber-600 dark:text-amber-400',
+  general: 'bg-cc-surface-container-high text-cc-text-secondary',
+  electronics: 'bg-cc-blue/15 text-cc-blue',
+  fashion: 'bg-cc-orange/15 text-cc-orange',
+  phone: 'bg-cc-blue/15 text-cc-blue',
+  food: 'bg-cc-yellow/15 text-cc-yellow',
+  beauty: 'bg-cc-orange/15 text-cc-orange',
+  home: 'bg-cc-yellow/15 text-cc-yellow',
   other: 'bg-white/10 text-cc-text-secondary',
 }
 
@@ -147,7 +147,6 @@ export function FlashSlideshow({ onBuyProduct }: FlashSlideshowProps) {
                   />
                 ) : (
                   <div className="w-full min-h-[250px] sm:min-h-[400px] flex items-center justify-center">
-                    <Package className="w-20 h-20 text-cc-text-secondary/20" />
                   </div>
                 )}
 
@@ -214,7 +213,7 @@ export function FlashSlideshow({ onBuyProduct }: FlashSlideshowProps) {
             <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-cc-border rounded-b-2xl overflow-hidden">
               <motion.div
                 key={currentIndex}
-                className="h-full bg-gradient-to-r from-orange-500 to-orange-400"
+                className="h-full bg-cc-orange"
                 initial={{ width: '0%' }}
                 animate={{ width: '100%' }}
                 transition={{ duration: 4, ease: 'linear' }}

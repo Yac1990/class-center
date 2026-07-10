@@ -3,9 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  Trophy, Star, Gift, Award, Crown, Medal, Zap,
-  Copy, Check, Clock, TrendingUp, Package, CreditCard,
-  Phone, ChevronRight, Loader2, Sparkles, Target,
+  Copy, Check,
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -23,11 +21,11 @@ import { formatCurrency } from '@/lib/commissions'
 // ==========================================
 
 const TIER_CONFIG: Record<string, { label: string; icon: string; color: string; bg: string; threshold: number }> = {
-  NONE: { label: 'Nouveau', icon: '🌱', color: 'text-gray-500', bg: 'bg-gray-500/10', threshold: 0 },
-  BRONZE: { label: 'Bronze', icon: '🥉', color: 'text-amber-700', bg: 'bg-amber-700/10', threshold: 5 },
-  SILVER: { label: 'Argent', icon: '🥈', color: 'text-gray-400', bg: 'bg-gray-400/10', threshold: 25 },
-  GOLD: { label: 'Or', icon: '🥇', color: 'text-yellow-500', bg: 'bg-yellow-500/10', threshold: 50 },
-  PLATINUM: { label: 'Platine', icon: '💎', color: 'text-purple-500', bg: 'bg-purple-500/10', threshold: 100 },
+  NONE: { label: 'Nouveau', icon: '🌱', color: 'text-cc-text-secondary', bg: 'bg-cc-surface-container-high', threshold: 0 },
+  BRONZE: { label: 'Bronze', icon: '🥉', color: 'text-cc-orange', bg: 'bg-cc-orange/10', threshold: 5 },
+  SILVER: { label: 'Argent', icon: '🥈', color: 'text-cc-text-secondary', bg: 'bg-cc-surface-container-high', threshold: 25 },
+  GOLD: { label: 'Or', icon: '🥇', color: 'text-cc-yellow', bg: 'bg-cc-yellow/10', threshold: 50 },
+  PLATINUM: { label: 'Platine', icon: '💎', color: 'text-cc-blue', bg: 'bg-cc-blue/10', threshold: 100 },
 }
 
 const CASHBACK_TIERS = [
@@ -186,7 +184,7 @@ export function LoyaltyDashboard({ userId }: { userId?: string }) {
               </p>
               <Button
                 onClick={() => setShowCongratulations(false)}
-                className="bg-cc-orange hover:bg-orange-600 text-white px-8"
+                className="bg-cc-orange hover:bg-cc-orange/90 text-white px-8"
               >
                 Merci ! 🎉
               </Button>
@@ -249,8 +247,7 @@ export function LoyaltyDashboard({ userId }: { userId?: string }) {
       {/* Cashback Tiers */}
       <Card className="border-cc-border">
         <CardHeader className="pb-3">
-          <CardTitle className="text-base font-bold text-cc-text-primary flex items-center gap-2">
-            <Target className="w-4 h-4 text-cc-orange" />
+          <CardTitle className="text-base font-bold text-cc-text-primary">
             Paliers de récompense
           </CardTitle>
         </CardHeader>
@@ -290,8 +287,7 @@ export function LoyaltyDashboard({ userId }: { userId?: string }) {
       {promoCodes.length > 0 && (
         <Card className="border-cc-border">
           <CardHeader className="pb-3">
-            <CardTitle className="text-base font-bold text-cc-text-primary flex items-center gap-2">
-              <Gift className="w-4 h-4 text-cc-orange" />
+            <CardTitle className="text-base font-bold text-cc-text-primary">
               Mes codes promo
             </CardTitle>
           </CardHeader>
@@ -301,13 +297,10 @@ export function LoyaltyDashboard({ userId }: { userId?: string }) {
                 key={promo.id}
                 className={`flex items-center gap-3 p-3 rounded-xl border ${
                   promo.status === 'ACTIVE'
-                    ? 'border-cc-orange/30 bg-orange-500/5'
+                    ? 'border-cc-orange/30 bg-cc-orange/5'
                     : 'border-cc-border bg-cc-surface-container-high/30'
                 }`}
               >
-                <div className="w-10 h-10 rounded-xl bg-cc-orange/10 flex items-center justify-center shrink-0">
-                  <Gift className="w-5 h-5 text-cc-orange" />
-                </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <code className="text-sm font-bold text-cc-text-primary font-mono">{promo.code}</code>
@@ -343,8 +336,7 @@ export function LoyaltyDashboard({ userId }: { userId?: string }) {
       {allOps.length > 0 && (
         <Card className="border-cc-border">
           <CardHeader className="pb-3">
-            <CardTitle className="text-base font-bold text-cc-text-primary flex items-center gap-2">
-              <Clock className="w-4 h-4 text-cc-orange" />
+            <CardTitle className="text-base font-bold text-cc-text-primary">
               Historique des opérations qualifiantes
             </CardTitle>
           </CardHeader>
@@ -352,17 +344,11 @@ export function LoyaltyDashboard({ userId }: { userId?: string }) {
             <ScrollArea className="max-h-96">
               <div className="space-y-2">
                 {allOps.map((op) => {
-                  const TypeIcon = op.type === 'RECHARGE' ? Phone :
-                    op.type === 'SUBSCRIPTION' ? Zap :
-                    op.type === 'FLASH_ORDER' ? Package : CreditCard
                   return (
                     <div
                       key={op.id}
                       className="flex items-center gap-3 p-3 rounded-xl bg-cc-surface-container-high/50"
                     >
-                      <div className="w-9 h-9 rounded-lg bg-cc-surface-container flex items-center justify-center shrink-0">
-                        <TypeIcon className="w-4 h-4 text-cc-text-secondary" />
-                      </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-cc-text-primary truncate">{op.name}</p>
                         <p className="text-[11px] text-cc-text-secondary">
@@ -385,8 +371,8 @@ export function LoyaltyDashboard({ userId }: { userId?: string }) {
       )}
 
       {/* Info box */}
-      <div className="p-4 rounded-xl bg-blue-500/5 border border-blue-500/20">
-        <p className="text-xs text-blue-700 dark:text-blue-400 leading-relaxed">
+      <div className="p-4 rounded-xl bg-cc-blue/5 border border-cc-blue/20">
+        <p className="text-xs text-cc-blue leading-relaxed">
           💡 <strong>Comment ça marche ?</strong> Chaque opération de plus de 5 000 F (recharge, souscription, achat de carte ou produit flash) compte comme une opération qualifiante.
           À 5 opérations, vous débloquez ce tableau de bord. À 25, 50 et 100 opérations, vous recevez des codes promo cashback utilisables directement sur le site !
         </p>

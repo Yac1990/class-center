@@ -3,8 +3,8 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  X, Search, Sparkles, ShoppingCart, CreditCard, Smartphone,
-  ArrowUpDown, ChevronDown, Plus,
+  X, Search,
+  ArrowUpDown, ChevronDown,
 } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -20,10 +20,10 @@ import { toast } from 'sonner'
 // OPERATOR CONFIG
 // ==========================================
 const OPERATOR_COLORS: Record<string, string> = {
-  ORANGE: 'bg-orange-500/15 text-orange-600 dark:text-orange-400',
-  MTN: 'bg-yellow-500/15 text-yellow-600 dark:text-yellow-400',
-  MOOV: 'bg-blue-500/15 text-blue-600 dark:text-blue-400',
-  ALL: 'bg-gray-500/15 text-gray-500 dark:text-gray-400',
+  ORANGE: 'bg-cc-orange/15 text-cc-orange',
+  MTN: 'bg-cc-yellow/15 text-cc-yellow',
+  MOOV: 'bg-cc-blue/15 text-cc-blue',
+  ALL: 'bg-cc-surface-container-high text-cc-text-secondary',
 }
 
 const OPERATOR_LABELS: Record<string, string> = {
@@ -156,9 +156,8 @@ export function PhysicalCatalogOverlay({ onClose }: PhysicalCatalogOverlayProps)
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-14">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-cc-orange" />
               <h1 className="text-lg font-black text-cc-text-primary">Cartes & Téléphones</h1>
-              <Badge className="bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20 text-[10px]">
+              <Badge className="bg-cc-orange/10 text-cc-orange border-cc-orange/20 text-[10px]">
                 {filteredCards.length} produit{filteredCards.length !== 1 ? 's' : ''}
               </Badge>
             </div>
@@ -265,7 +264,6 @@ export function PhysicalCatalogOverlay({ onClose }: PhysicalCatalogOverlayProps)
           </div>
         ) : filteredCards.length === 0 ? (
           <div className="text-center py-20">
-            <CreditCard className="w-16 h-16 text-cc-text-secondary/20 mx-auto mb-4" />
             <h3 className="text-lg font-bold text-cc-text-primary mb-2">Aucun produit trouvé</h3>
             <p className="text-sm text-cc-text-secondary mb-4">
               {searchQuery ? `Aucun résultat pour "${searchQuery}"` : 'Aucun produit pour cet opérateur'}
@@ -303,7 +301,6 @@ export function PhysicalCatalogOverlay({ onClose }: PhysicalCatalogOverlayProps)
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-cc-surface-container-high to-cc-surface-container">
-                          <CreditCard className="w-12 h-12 text-cc-text-secondary/20" />
                         </div>
                       )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
@@ -331,7 +328,7 @@ export function PhysicalCatalogOverlay({ onClose }: PhysicalCatalogOverlayProps)
                       )}
                       <div className="flex gap-2 mt-auto">
                         <Button
-                          className="flex-1 bg-gradient-to-r from-cc-orange to-orange-600 text-white h-9 btn-glow-orange font-bold text-xs sm:text-sm rounded-xl group-hover:shadow-lg transition-all duration-300"
+                          className="flex-1 bg-cc-orange text-white h-9 btn-glow-orange font-bold text-xs sm:text-sm rounded-xl group-hover:shadow-lg transition-all duration-300"
                           onClick={() => {
                             addToCart({
                               id: `card-${card.id}`,
@@ -346,12 +343,11 @@ export function PhysicalCatalogOverlay({ onClose }: PhysicalCatalogOverlayProps)
                             setCartOpen(true)
                           }}
                         >
-                          <ShoppingCart className="w-3.5 h-3.5 mr-1.5" />
                           Acheter
                         </Button>
                         <Button
                           variant="outline"
-                          className="border-cc-orange/30 text-cc-orange hover:bg-orange-500/10 h-9 px-2.5 rounded-xl"
+                          className="border-cc-orange/30 text-cc-orange hover:bg-cc-orange/10 h-9 px-2.5 rounded-xl"
                           onClick={() => {
                             addToCart({
                               id: `card-${card.id}`,
@@ -367,7 +363,7 @@ export function PhysicalCatalogOverlay({ onClose }: PhysicalCatalogOverlayProps)
                           }}
                           title="Ajouter au panier"
                         >
-                          <Plus className="w-3.5 h-3.5" />
+                          Ajouter
                         </Button>
                       </div>
                     </div>

@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  Phone, Zap, CreditCard, Check, Copy, CheckCircle, Clock, AlertCircle,
-  BarChart3, History, CircleDollarSign, Info, ExternalLink, Loader2, Star, Wallet, RefreshCw,
+  Check, Copy, CheckCircle, AlertCircle,
+  ExternalLink, Loader2, Star, RefreshCw,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -42,9 +42,9 @@ export function ClientSpace({ cabineToken }: { cabineToken: string | null }) {
   }, [user?.id])
 
   const bottomNavItems = [
-    { id: 'recharger', label: 'Recharger', icon: Zap },
-    { id: 'historique', label: 'Historique', icon: History },
-    ...(isLoyalClient ? [{ id: 'tableau', label: 'Mon Tableau', icon: BarChart3 as React.ComponentType<{ className?: string }> }] : []),
+    { id: 'recharger', label: 'Recharger' },
+    { id: 'historique', label: 'Historique' },
+    ...(isLoyalClient ? [{ id: 'tableau', label: 'Mon Tableau' }] : []),
   ]
 
   const handleBottomNav = (id: string) => {
@@ -68,10 +68,10 @@ export function ClientSpace({ cabineToken }: { cabineToken: string | null }) {
 
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className={`grid w-full mb-6 bg-cc-surface-container border border-cc-border ${isLoyalClient ? 'grid-cols-3' : 'grid-cols-2'}`}>
-              <TabsTrigger value="recharger" className="data-[state=active]:bg-cc-blue data-[state=active]:text-white"><Zap className="w-4 h-4 mr-2" /> Recharger</TabsTrigger>
-              <TabsTrigger value="historique" className="data-[state=active]:bg-cc-blue data-[state=active]:text-white"><Clock className="w-4 h-4 mr-2" /> Historique</TabsTrigger>
+              <TabsTrigger value="recharger" className="data-[state=active]:bg-cc-blue data-[state=active]:text-white">Recharger</TabsTrigger>
+              <TabsTrigger value="historique" className="data-[state=active]:bg-cc-blue data-[state=active]:text-white">Historique</TabsTrigger>
               {isLoyalClient && (
-                <TabsTrigger value="tableau" className="data-[state=active]:bg-cc-blue data-[state=active]:text-white"><BarChart3 className="w-4 h-4 mr-2" /> Mon Tableau</TabsTrigger>
+                <TabsTrigger value="tableau" className="data-[state=active]:bg-cc-blue data-[state=active]:text-white">Mon Tableau</TabsTrigger>
               )}
             </TabsList>
 
@@ -105,12 +105,11 @@ export function ClientSpace({ cabineToken }: { cabineToken: string | null }) {
             <button
               key={item.id}
               onClick={() => handleBottomNav(item.id)}
-              className={`flex flex-col items-center gap-0.5 py-1 px-3 transition-smooth ${
-                isActive ? 'text-cc-blue' : 'text-cc-text-secondary'
+              className={`flex flex-col items-center gap-0.5 py-2 px-3 transition-smooth ${
+                isActive ? 'text-cc-blue bg-cc-blue/5 rounded-xl' : 'text-cc-text-secondary'
               }`}
             >
-              <item.icon className={`w-5 h-5 ${isActive ? 'drop-shadow-[0_0_6px_rgba(37,99,235,0.5)]' : ''}`} />
-              <span className="text-[9px] font-medium">{item.label}</span>
+              <span className="text-[11px] font-bold uppercase tracking-wider">{item.label}</span>
             </button>
           )
         })}
@@ -407,9 +406,9 @@ export function UnifiedRechargeFlow({ userId, cabineToken }: { userId?: string; 
 
           <Button
             onClick={handleNewRecharge}
-            className="w-full bg-gradient-to-r from-cc-orange to-orange-600 text-white h-11 btn-glow-orange"
+            className="w-full bg-cc-orange hover:bg-cc-orange/90 text-white h-11 btn-glow-orange"
           >
-            <Zap className="w-4 h-4 mr-2" /> Nouvelle recharge
+            Nouvelle recharge
           </Button>
         </motion.div>
       </div>
@@ -437,9 +436,9 @@ export function UnifiedRechargeFlow({ userId, cabineToken }: { userId?: string; 
           )}
           <Button
             onClick={handleNewRecharge}
-            className="w-full bg-gradient-to-r from-cc-orange to-orange-600 text-white h-11 btn-glow-orange"
+            className="w-full bg-cc-orange hover:bg-cc-orange/90 text-white h-11 btn-glow-orange"
           >
-            <RefreshCw className="w-4 h-4 mr-2" /> Réessayer
+            Réessayer
           </Button>
         </motion.div>
       </div>
@@ -450,7 +449,7 @@ export function UnifiedRechargeFlow({ userId, cabineToken }: { userId?: string; 
   const renderProgressTracker = () => {
     const steps = [
       { num: 1, icon: Check, label: 'Informations validées', sub: null, completed: activeStep >= 2 },
-      { num: 2, icon: CreditCard, label: 'Paiement en attente', sub: activeStep === 2 ? (confirmCountdown > 0 ? `Attendez ${confirmCountdown}s...` : 'Cochez pour confirmer') : null, completed: activeStep >= 3, active: activeStep === 2 },
+      { num: 2, icon: RefreshCw, label: 'Paiement en attente', sub: activeStep === 2 ? (confirmCountdown > 0 ? `Attendez ${confirmCountdown}s...` : 'Cochez pour confirmer') : null, completed: activeStep >= 3, active: activeStep === 2 },
       { num: 3, icon: RefreshCw, label: 'Recharge en cours', sub: activeStep === 3 ? 'Traitement automatique...' : null, completed: activeStep >= 4, active: activeStep === 3 },
       { num: 4, icon: CheckCircle, label: 'Recharge effectuée', sub: null, completed: activeStep >= 4 },
     ]
@@ -516,17 +515,15 @@ export function UnifiedRechargeFlow({ userId, cabineToken }: { userId?: string; 
         <Card className="bg-cc-surface-container border border-cc-border rounded-2xl">
           <CardContent className="pt-6 space-y-5">
             {/* Reference display */}
-            {transactionRef && (
-              <div className="flex items-center justify-between bg-cc-blue/5 border border-cc-blue/10 rounded-xl p-3">
-                <div>
-                  <p className="text-[10px] uppercase tracking-widest text-cc-text-secondary">Référence</p>
-                  <p className="text-sm font-mono font-bold text-cc-blue">{transactionRef}</p>
-                </div>
-                <button onClick={handleCopyRef} className="p-2 hover:bg-cc-surface-container-highest rounded-lg transition-smooth">
-                  {copiedRef ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4 text-cc-blue" />}
-                </button>
+            <div className="flex items-center gap-3 bg-cc-surface-container-high/50 border border-cc-border rounded-xl p-3">
+              <div className="flex-1">
+                <p className="text-[10px] uppercase tracking-widest text-cc-text-secondary">Référence</p>
+                <p className="text-sm font-mono font-bold text-cc-blue">{transactionRef}</p>
               </div>
-            )}
+              <button onClick={handleCopyRef} className="p-2 hover:bg-cc-surface-container-highest rounded-lg transition-smooth">
+                {copiedRef ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4 text-cc-blue" />}
+              </button>
+            </div>
 
             {/* Progress tracker */}
             {renderProgressTracker()}
@@ -540,7 +537,6 @@ export function UnifiedRechargeFlow({ userId, cabineToken }: { userId?: string; 
               >
                 {/* Payment link */}
                 <div className="flex items-center gap-2 mb-2">
-                  <Wallet className="w-5 h-5 text-cc-orange" />
                   <span className="font-semibold text-cc-text-primary">Effectuez le paiement</span>
                 </div>
                 <p className="text-sm text-cc-text-secondary">
@@ -553,25 +549,24 @@ export function UnifiedRechargeFlow({ userId, cabineToken }: { userId?: string; 
                     href={WAVE_PAY_LINK}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 w-full h-11 rounded-xl bg-gradient-to-r from-cc-orange to-orange-600 text-white font-bold hover:from-orange-600 hover:to-orange-700 transition-smooth"
+                    className="flex items-center justify-center gap-2 w-full h-11 rounded-xl bg-cc-orange hover:bg-cc-orange/90 text-white font-bold transition-smooth"
                   >
-                    <ExternalLink className="w-4 h-4" /> Ouvrir Wave Pay
+                    Ouvrir Wave Pay
                   </a>
                 ) : (
                   <a
                     href={DJAMO_PAY_LINK}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 w-full h-11 rounded-xl bg-gradient-to-r from-green-500 to-green-600 text-white font-bold hover:from-green-600 hover:to-green-700 transition-smooth"
+                    className="flex items-center justify-center gap-2 w-full h-11 rounded-xl bg-cc-blue hover:bg-cc-blue/90 text-white font-bold transition-smooth"
                   >
-                    <Wallet className="w-4 h-4" /> Ouvrir Djamo Pay
+                    Ouvrir Djamo Pay
                   </a>
                 )}
 
                 {/* Countdown */}
                 {confirmCountdown > 0 && (
                   <div className="flex items-center gap-2 p-2 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
-                    <Clock className="w-3.5 h-3.5 text-yellow-500 shrink-0" />
                     <span className="text-xs text-yellow-400">Veuillez d&apos;abord effectuer le paiement... ({confirmCountdown}s)</span>
                   </div>
                 )}
@@ -604,8 +599,7 @@ export function UnifiedRechargeFlow({ userId, cabineToken }: { userId?: string; 
                 </div>
 
                 {/* Fraud warning */}
-                <div className="flex items-start gap-2 p-2 rounded-lg bg-red-500/5 border border-red-500/10">
-                  <AlertCircle className="w-3.5 h-3.5 text-red-400 mt-0.5 shrink-0" />
+                <div className="p-2 rounded-lg bg-red-500/5 border border-red-500/10">
                   <p className="text-[10px] text-red-400/80">⚠️ Tout faux signalement de paiement sera signalé et votre compte pourra être suspendu.</p>
                 </div>
               </motion.div>
@@ -633,15 +627,13 @@ export function UnifiedRechargeFlow({ userId, cabineToken }: { userId?: string; 
   return (
     <Card className="max-w-lg mx-auto bg-cc-surface-container border border-cc-border rounded-2xl">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-cc-text-primary">
-          <Zap className="w-5 h-5 text-cc-orange" />
+        <CardTitle className="text-cc-text-primary">
           Recharger ou souscrire
         </CardTitle>
       </CardHeader>
       <CardContent>
         {/* Guide message */}
-        <div className="flex items-start gap-2 p-3 mb-4 rounded-xl bg-cc-blue/5 border border-cc-blue/10">
-          <Info className="w-4 h-4 text-cc-blue mt-0.5 shrink-0" />
+        <div className="p-3 mb-4 rounded-xl bg-cc-blue/5 border border-cc-blue/10">
           <p className="text-xs text-cc-text-secondary">
             <strong className="text-cc-blue">Comment ça marche ?</strong> Entrez votre numéro, choisissez le montant ou forfait, payez via Wave ou Djamo, puis confirmez. C&apos;est tout !
           </p>
@@ -700,7 +692,7 @@ export function UnifiedRechargeFlow({ userId, cabineToken }: { userId?: string; 
                 }`}
               >
                 <div className="font-bold text-sm text-cc-text-primary mb-0.5">
-                  <Phone className="w-4 h-4 inline mr-1" /> Recharge
+                  Recharge
                 </div>
                 <div className="text-[10px] text-cc-text-secondary">Montant libre</div>
               </button>
@@ -714,7 +706,7 @@ export function UnifiedRechargeFlow({ userId, cabineToken }: { userId?: string; 
                 }`}
               >
                 <div className="font-bold text-sm text-cc-text-primary mb-0.5">
-                  <CreditCard className="w-4 h-4 inline mr-1" /> Forfait
+                  Forfait
                 </div>
                 <div className="text-[10px] text-cc-text-secondary">Plans opérateurs</div>
               </button>
@@ -833,14 +825,14 @@ export function UnifiedRechargeFlow({ userId, cabineToken }: { userId?: string; 
             disabled={!canSubmit || loading}
             className={`w-full h-12 text-base font-bold ${
               canSubmit && !loading
-                ? 'bg-gradient-to-r from-cc-orange to-orange-600 text-white btn-glow-orange'
+                ? 'bg-cc-orange text-white btn-glow-orange hover:bg-cc-orange/90'
                 : 'bg-cc-orange/20 text-cc-text-secondary/40 cursor-not-allowed'
             }`}
           >
             {loading ? (
               <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> Traitement...</>
             ) : (
-              <><Zap className="w-5 h-5 mr-2" /> Recharger ou souscrire</>
+              'Recharger ou souscrire'
             )}
           </Button>
         </div>
@@ -908,8 +900,7 @@ export function ClientHistory({ userId }: { userId?: string }) {
   return (
     <div className="max-w-2xl mx-auto space-y-4">
       {/* Guide message */}
-      <div className="flex items-start gap-2 p-3 rounded-xl bg-cc-yellow/5 border border-cc-yellow/10">
-        <Info className="w-4 h-4 text-cc-yellow mt-0.5 shrink-0" />
+      <div className="p-3 rounded-xl bg-cc-yellow/5 border border-cc-yellow/10">
         <p className="text-xs text-cc-text-secondary">
           <strong className="text-cc-yellow">Votre historique</strong> — Suivez ici toutes vos transactions, recharges et souscriptions. Effectuez 2 actions pour devenir Client Fidèle !
         </p>
@@ -919,24 +910,19 @@ export function ClientHistory({ userId }: { userId?: string }) {
       {!isLoyalClient && (
         <Card className="bg-gradient-to-r from-cc-orange/10 to-cc-yellow/10 border border-cc-orange/20 rounded-2xl">
           <CardContent className="py-4">
-            <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-lg bg-cc-orange/20 flex items-center justify-center shrink-0">
-                <Star className="w-5 h-5 text-cc-orange" />
-              </div>
-              <div className="flex-1">
-                <p className="font-semibold text-sm text-cc-text-primary mb-1">Devenez Client Fidèle ⭐</p>
-                <p className="text-xs text-cc-text-secondary mb-3">
-                  Effectuez 2 actions pour devenir Client Fidèle et accéder à votre tableau de bord !
-                </p>
-                <div className="flex items-center gap-2">
-                  <div className="flex-1 h-2 bg-cc-surface-container-high rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-gradient-to-r from-cc-orange to-cc-yellow rounded-full transition-all duration-500"
-                      style={{ width: `${Math.min((completedCount / 2) * 100, 100)}%` }}
-                    />
-                  </div>
-                  <span className="text-xs font-medium text-cc-orange">{completedCount}/2</span>
+            <div className="flex-1">
+              <p className="font-semibold text-sm text-cc-text-primary mb-1">Devenez Client Fidèle ⭐</p>
+              <p className="text-xs text-cc-text-secondary mb-3">
+                Effectuez 2 actions pour devenir Client Fidèle et accéder à votre tableau de bord !
+              </p>
+              <div className="flex items-center gap-2">
+                <div className="flex-1 h-2 bg-cc-surface-container-high rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-cc-orange to-cc-yellow rounded-full transition-all duration-500"
+                    style={{ width: `${Math.min((completedCount / 2) * 100, 100)}%` }}
+                  />
                 </div>
+                <span className="text-xs font-medium text-cc-orange">{completedCount}/2</span>
               </div>
             </div>
           </CardContent>
@@ -946,7 +932,6 @@ export function ClientHistory({ userId }: { userId?: string }) {
       {/* Loyal client badge */}
       {isLoyalClient && (
         <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-cc-yellow/10 to-cc-orange/10 border border-cc-yellow/20">
-          <Star className="w-4 h-4 text-cc-yellow fill-cc-yellow" />
           <span className="text-sm font-medium text-cc-yellow">Client Fidèle ⭐</span>
           <span className="text-xs text-cc-text-secondary ml-auto">{completedCount} actions complétées</span>
         </div>
@@ -962,7 +947,6 @@ export function ClientHistory({ userId }: { userId?: string }) {
         <TabsContent value="transactions">
           {transactions.length === 0 ? (
             <Card className="bg-cc-surface-container border border-cc-border"><CardContent className="py-8 text-center text-cc-text-secondary">
-              <Zap className="w-10 h-10 mx-auto mb-2 opacity-30" />
               <p>Aucune transaction pour le moment</p>
             </CardContent></Card>
           ) : (
@@ -971,23 +955,14 @@ export function ClientHistory({ userId }: { userId?: string }) {
                 {transactions.map((t: any) => (
                   <Card key={t.id} className="glow-card bg-cc-surface-container border border-cc-border rounded-xl">
                     <CardContent className="py-3 flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-lg ${OPERATOR_INFO[t.operator]?.bg || 'bg-gray-200'} flex items-center justify-center`}>
-                          {t.type === 'RECHARGE' ? (
-                            <Phone className={`w-5 h-5 ${OPERATOR_INFO[t.operator]?.color || 'text-gray-600'}`} />
-                          ) : (
-                            <CreditCard className={`w-5 h-5 ${OPERATOR_INFO[t.operator]?.color || 'text-gray-600'}`} />
-                          )}
-                        </div>
-                        <div>
-                          <p className="font-medium text-sm text-cc-text-primary">
-                            {t.type === 'RECHARGE' ? 'Recharge' : t.planName || 'Forfait'}
-                          </p>
-                          <p className="text-xs text-cc-text-secondary">
-                            <span className="font-mono text-cc-blue/60">{t.reference}</span>
-                            {' · '}{maskPhone(t.phone)}
-                          </p>
-                        </div>
+                      <div>
+                        <p className="font-medium text-sm text-cc-text-primary">
+                          {t.type === 'RECHARGE' ? 'Recharge' : t.planName || 'Forfait'}
+                        </p>
+                        <p className="text-xs text-cc-text-secondary">
+                          <span className="font-mono text-cc-blue/60">{t.reference}</span>
+                          {' · '}{maskPhone(t.phone)}
+                        </p>
                       </div>
                       <div className="text-right">
                         <p className="font-bold text-sm text-cc-text-primary">{formatCurrency(t.amount)}</p>
@@ -1004,7 +979,6 @@ export function ClientHistory({ userId }: { userId?: string }) {
         <TabsContent value="recharges">
           {recharges.length === 0 ? (
             <Card className="bg-cc-surface-container border border-cc-border"><CardContent className="py-8 text-center text-cc-text-secondary">
-              <Phone className="w-10 h-10 mx-auto mb-2 opacity-30" />
               <p>Aucune recharge pour le moment</p>
             </CardContent></Card>
           ) : (
@@ -1013,14 +987,9 @@ export function ClientHistory({ userId }: { userId?: string }) {
                 {recharges.map((r: any) => (
                   <Card key={r.id} className="glow-card bg-cc-surface-container border border-cc-border rounded-xl">
                     <CardContent className="py-3 flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-lg ${OPERATOR_INFO[r.operator]?.bg || 'bg-gray-200'} flex items-center justify-center`}>
-                          <Phone className={`w-5 h-5 ${OPERATOR_INFO[r.operator]?.color || 'text-gray-600'}`} />
-                        </div>
-                        <div>
-                          <p className="font-medium text-sm text-cc-text-primary">{r.clientName}</p>
-                          <p className="text-xs text-cc-text-secondary">{maskPhone(r.phone)}</p>
-                        </div>
+                      <div>
+                        <p className="font-medium text-sm text-cc-text-primary">{r.clientName}</p>
+                        <p className="text-xs text-cc-text-secondary">{maskPhone(r.phone)}</p>
                       </div>
                       <div className="text-right">
                         <p className="font-bold text-sm text-cc-text-primary">{formatCurrency(r.amount)}</p>
@@ -1039,7 +1008,6 @@ export function ClientHistory({ userId }: { userId?: string }) {
         <TabsContent value="subscriptions">
           {subscriptions.length === 0 ? (
             <Card className="bg-cc-surface-container border border-cc-border"><CardContent className="py-8 text-center text-cc-text-secondary">
-              <CreditCard className="w-10 h-10 mx-auto mb-2 opacity-30" />
               <p>Aucune souscription pour le moment</p>
             </CardContent></Card>
           ) : (
@@ -1048,14 +1016,9 @@ export function ClientHistory({ userId }: { userId?: string }) {
                 {subscriptions.map((s: any) => (
                   <Card key={s.id} className="glow-card bg-cc-surface-container border border-cc-border rounded-xl">
                     <CardContent className="py-3 flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-lg ${OPERATOR_INFO[s.operator]?.bg || 'bg-gray-200'} flex items-center justify-center`}>
-                          <CreditCard className={`w-5 h-5 ${OPERATOR_INFO[s.operator]?.color || 'text-gray-600'}`} />
-                        </div>
-                        <div>
-                          <p className="font-medium text-sm text-cc-text-primary">{s.planName}</p>
-                          <p className="text-xs text-cc-text-secondary">{s.clientName} — {maskPhone(s.phone)}</p>
-                        </div>
+                      <div>
+                        <p className="font-medium text-sm text-cc-text-primary">{s.planName}</p>
+                        <p className="text-xs text-cc-text-secondary">{s.clientName} — {maskPhone(s.phone)}</p>
                       </div>
                       <div className="text-right">
                         <p className="font-bold text-sm text-cc-text-primary">{formatCurrency(s.amount)}</p>

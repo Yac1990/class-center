@@ -3,9 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  X, CreditCard, Shield, Clock, CheckCircle, ArrowRight,
-  MessageCircle, Wallet, Smartphone, Monitor, AlertCircle,
-  Lock, ChevronRight, Sparkles, Phone,
+  X, Clock, CheckCircle, Wallet, AlertCircle, ChevronRight,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -41,14 +39,14 @@ function StepIndicator({ currentStep }: { currentStep: Step }) {
               w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-500
               ${i <= currentIndex
                 ? 'bg-gradient-to-r from-cc-orange to-orange-500 text-white shadow-lg shadow-orange-500/20'
-                : 'bg-[#2a2a2a] text-[#a89080]/50 border border-white/[0.06]'
+                : 'bg-cc-surface-container-highest text-cc-text-secondary/50 border border-white/[0.06]'
               }
             `}>
               {i < currentIndex ? <CheckCircle className="w-4 h-4" /> : step.num}
             </div>
             <span className={`
               text-xs font-medium hidden sm:block transition-colors duration-300
-              ${i <= currentIndex ? 'text-[#e5e2e1]' : 'text-[#a89080]/40'}
+              ${i <= currentIndex ? 'text-cc-text-primary' : 'text-cc-text-secondary/40'}
             `}>
               {step.label}
             </span>
@@ -56,7 +54,7 @@ function StepIndicator({ currentStep }: { currentStep: Step }) {
           {i < steps.length - 1 && (
             <div className={`
               w-6 sm:w-10 h-[2px] rounded-full transition-all duration-500
-              ${i < currentIndex ? 'bg-gradient-to-r from-cc-orange to-orange-500' : 'bg-[#2a2a2a]'}
+              ${i < currentIndex ? 'bg-gradient-to-r from-cc-orange to-orange-500' : 'bg-cc-surface-container-highest'}
             `} />
           )}
         </React.Fragment>
@@ -174,12 +172,11 @@ export function PaymentOverlay({ card, onClose }: PaymentOverlayProps) {
                 onClick={onClose}
                 className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/[0.06] hover:bg-white/10 flex items-center justify-center transition-colors"
               >
-                <X className="w-4 h-4 text-[#a89080]" />
+                <X className="w-4 h-4 text-cc-text-secondary" />
               </button>
 
               {/* Secure badge */}
               <div className="flex items-center gap-1.5 mb-3">
-                <Lock className="w-3.5 h-3.5 text-green-400" />
                 <span className="text-[10px] uppercase tracking-widest text-green-400 font-semibold">Paiement Sécurisé</span>
               </div>
 
@@ -189,13 +186,13 @@ export function PaymentOverlay({ card, onClose }: PaymentOverlayProps) {
                   {card.imageUrl ? (
                     <img src={card.imageUrl} alt={card.name} className="w-full h-full object-cover" />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <CreditCard className="w-6 h-6 text-[#a89080]/30" />
+                    <div className="w-full h-full flex items-center justify-center bg-cc-surface-container-high">
+                      <span className="text-[10px] text-cc-text-secondary/50 font-bold uppercase tracking-tighter">Carte</span>
                     </div>
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-[#e5e2e1] text-base truncate">{card.name}</h3>
+                  <h3 className="font-bold text-cc-text-primary text-base truncate">{card.name}</h3>
                   <Badge className={`${opInfo.bg} ${opInfo.color} text-[9px] mt-1`}>{opInfo.name}</Badge>
                   <div className="mt-1.5">
                     <span className="font-black text-xl gradient-text">{formatCurrency(card.price)}</span>
@@ -221,8 +218,8 @@ export function PaymentOverlay({ card, onClose }: PaymentOverlayProps) {
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <h4 className="text-lg font-bold text-[#e5e2e1] mb-1">Choisissez votre moyen de paiement</h4>
-                    <p className="text-sm text-[#a89080] mb-5">Sélectionnez la méthode qui vous convient le mieux</p>
+                    <h4 className="text-lg font-bold text-cc-text-primary mb-1">Choisissez votre moyen de paiement</h4>
+                    <p className="text-sm text-cc-text-secondary mb-5">Sélectionnez la méthode qui vous convient le mieux</p>
 
                     <div className="space-y-3">
                       {/* Wave option */}
@@ -237,15 +234,14 @@ export function PaymentOverlay({ card, onClose }: PaymentOverlayProps) {
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center gap-2">
-                              <span className="font-bold text-[#e5e2e1]">Wave</span>
+                              <span className="font-bold text-cc-text-primary">Wave</span>
                               <Badge className="bg-cc-orange/10 text-cc-orange text-[9px] border-cc-orange/20">Populaire</Badge>
                             </div>
                             <div className="flex items-center gap-1.5 mt-1">
-                              <Monitor className="w-3 h-3 text-[#a89080]" />
-                              <span className="text-xs text-[#a89080]">Idéal pour ordinateur</span>
+                              <span className="text-xs text-cc-text-secondary">Idéal pour ordinateur</span>
                             </div>
                           </div>
-                          <ChevronRight className="w-5 h-5 text-[#a89080]/40 group-hover:text-cc-orange transition-colors" />
+                          <ChevronRight className="w-5 h-5 text-cc-text-secondary/40 group-hover:text-cc-orange transition-colors" />
                         </div>
                       </button>
 
@@ -261,23 +257,21 @@ export function PaymentOverlay({ card, onClose }: PaymentOverlayProps) {
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center gap-2">
-                              <span className="font-bold text-[#e5e2e1]">Djamo</span>
+                              <span className="font-bold text-cc-text-primary">Djamo</span>
                               <Badge className="bg-green-500/10 text-green-400 text-[9px] border-green-500/20">Multi-wallet</Badge>
                             </div>
                             <div className="flex items-center gap-1.5 mt-1">
-                              <Smartphone className="w-3 h-3 text-[#a89080]" />
-                              <span className="text-xs text-[#a89080]">Wave, Orange, MTN, Moov — Smartphone</span>
+                              <span className="text-xs text-cc-text-secondary">Wave, Orange, MTN, Moov — Smartphone</span>
                             </div>
                           </div>
-                          <ChevronRight className="w-5 h-5 text-[#a89080]/40 group-hover:text-green-400 transition-colors" />
+                          <ChevronRight className="w-5 h-5 text-cc-text-secondary/40 group-hover:text-green-400 transition-colors" />
                         </div>
                       </button>
                     </div>
 
                     {/* Security note */}
                     <div className="flex items-center gap-2 mt-5 p-3 rounded-xl bg-[#1a1a1a] border border-white/[0.04]">
-                      <Shield className="w-4 h-4 text-cc-blue shrink-0" />
-                      <p className="text-[11px] text-[#a89080]">
+                      <p className="text-[11px] text-cc-text-secondary">
                         Vos transactions sont sécurisées. Après le paiement, vous recevrez votre code par WhatsApp.
                       </p>
                     </div>
@@ -293,14 +287,14 @@ export function PaymentOverlay({ card, onClose }: PaymentOverlayProps) {
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <button onClick={handleBack} className="flex items-center gap-1 text-sm text-[#a89080] hover:text-[#e5e2e1] mb-4 transition-colors">
+                    <button onClick={handleBack} className="flex items-center gap-1 text-sm text-cc-text-secondary hover:text-cc-text-primary mb-4 transition-colors">
                       ← Retour
                     </button>
 
-                    <h4 className="text-lg font-bold text-[#e5e2e1] mb-1">
+                    <h4 className="text-lg font-bold text-cc-text-primary mb-1">
                       Effectuez votre paiement
                     </h4>
-                    <p className="text-sm text-[#a89080] mb-5">
+                    <p className="text-sm text-cc-text-secondary mb-5">
                       via {paymentMethod === 'wave' ? 'Wave' : 'Djamo'}
                     </p>
 
@@ -322,10 +316,10 @@ export function PaymentOverlay({ card, onClose }: PaymentOverlayProps) {
                           }
                         </div>
                         <div>
-                          <p className="font-bold text-[#e5e2e1]">
+                          <p className="font-bold text-cc-text-primary">
                             {paymentMethod === 'wave' ? 'Wave Pay' : 'Djamo Pay'}
                           </p>
-                          <p className="text-xs text-[#a89080]">
+                          <p className="text-xs text-cc-text-secondary">
                             {paymentMethod === 'wave'
                               ? 'Paiement Wave sur ordinateur'
                               : 'Wave, Orange Money, MTN, Moov'}
@@ -343,14 +337,13 @@ export function PaymentOverlay({ card, onClose }: PaymentOverlayProps) {
                         onClick={handleOpenPaymentLink}
                       >
                         Ouvrir {paymentMethod === 'wave' ? 'Wave' : 'Djamo'} Pay
-                        <ArrowRight className="w-4 h-4 ml-2" />
                       </Button>
                     </div>
 
                     {/* Amount summary */}
                     <div className="rounded-xl bg-[#1a1a1a] border border-white/[0.06] p-4 mb-5">
                       <div className="flex justify-between items-center">
-                        <span className="text-sm text-[#a89080]">Montant à payer</span>
+                        <span className="text-sm text-cc-text-secondary">Montant à payer</span>
                         <span className="font-black text-xl gradient-text">{formatCurrency(card.price)}</span>
                       </div>
                     </div>
@@ -365,19 +358,12 @@ export function PaymentOverlay({ card, onClose }: PaymentOverlayProps) {
                         <div className="flex items-center gap-3">
                           <div className="relative">
                             <Clock className="w-8 h-8 text-yellow-500" />
-                            <motion.div
-                              className="absolute inset-0 rounded-full"
-                              animate={{ scale: [1, 1.2, 1], opacity: [1, 0.5, 1] }}
-                              transition={{ duration: 1, repeat: Infinity }}
-                            >
-                              <Clock className="w-8 h-8 text-yellow-500/30" />
-                            </motion.div>
                           </div>
                           <div>
                             <p className="text-sm font-semibold text-yellow-400">
                               Attendez {confirmTimer}s
                             </p>
-                            <p className="text-xs text-[#a89080]">
+                            <p className="text-xs text-cc-text-secondary">
                               Effectuez d&apos;abord le paiement avant de confirmer
                             </p>
                           </div>
@@ -411,10 +397,10 @@ export function PaymentOverlay({ card, onClose }: PaymentOverlayProps) {
                           {confirmTimer <= 0 && <CheckCircle className="w-4 h-4 text-cc-orange" />}
                         </div>
                         <div>
-                          <p className={`font-semibold text-sm ${confirmTimer > 0 ? 'text-[#a89080]/50' : 'text-[#e5e2e1]'}`}>
+                          <p className={`font-semibold text-sm ${confirmTimer > 0 ? 'text-cc-text-secondary/50' : 'text-cc-text-primary'}`}>
                             J&apos;ai effectué le paiement
                           </p>
-                          <p className="text-xs text-[#a89080]">
+                          <p className="text-xs text-cc-text-secondary">
                             Cochez uniquement si vous avez vraiment payé
                           </p>
                         </div>
@@ -440,50 +426,42 @@ export function PaymentOverlay({ card, onClose }: PaymentOverlayProps) {
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <button onClick={handleBack} className="flex items-center gap-1 text-sm text-[#a89080] hover:text-[#e5e2e1] mb-4 transition-colors">
+                    <button onClick={handleBack} className="flex items-center gap-1 text-sm text-cc-text-secondary hover:text-cc-text-primary mb-4 transition-colors">
                       ← Retour
                     </button>
 
                     {/* Success animation */}
                     <div className="text-center mb-6">
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-                        className="w-20 h-20 rounded-full bg-green-500/10 border-2 border-green-500/30 flex items-center justify-center mx-auto mb-4"
-                      >
-                        <CheckCircle className="w-10 h-10 text-green-500" />
-                      </motion.div>
-                      <h4 className="text-xl font-black text-[#e5e2e1] mb-1">Paiement confirmé !</h4>
-                      <p className="text-sm text-[#a89080]">
+                      <h4 className="text-xl font-black text-cc-text-primary mb-1">Paiement confirmé !</h4>
+                      <p className="text-sm text-cc-text-secondary">
                         Validez votre achat via WhatsApp pour recevoir votre code
                       </p>
                     </div>
 
                     {/* Order summary */}
                     <div className="rounded-2xl bg-[#1a1a1a] border border-white/[0.06] p-4 mb-5">
-                      <h5 className="text-xs uppercase tracking-widest text-[#a89080] mb-3 font-semibold">Récapitulatif</h5>
+                      <h5 className="text-xs uppercase tracking-widest text-cc-text-secondary mb-3 font-semibold">Récapitulatif</h5>
                       <div className="flex items-center gap-3 mb-3">
                         <div className="w-12 h-12 rounded-xl bg-[#222] border border-white/[0.06] overflow-hidden shrink-0">
                           {card.imageUrl ? (
                             <img src={card.imageUrl} alt={card.name} className="w-full h-full object-cover" />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                              <CreditCard className="w-5 h-5 text-[#a89080]/30" />
+                            <div className="w-full h-full flex items-center justify-center bg-cc-surface-container-high">
+                              <span className="text-[10px] text-cc-text-secondary/50 font-bold uppercase tracking-tighter">Carte</span>
                             </div>
                           )}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="font-bold text-[#e5e2e1] text-sm truncate">{card.name}</p>
-                          <p className="text-xs text-[#a89080]">
+                          <p className="font-bold text-cc-text-primary text-sm truncate">{card.name}</p>
+                          <p className="text-xs text-cc-text-secondary">
                             via {paymentMethod === 'wave' ? 'Wave' : 'Djamo'}
                           </p>
                         </div>
                         <span className="font-black text-base gradient-text">{formatCurrency(card.price)}</span>
                       </div>
                       <div className="border-t border-white/[0.04] pt-2 flex justify-between items-center">
-                        <span className="text-xs text-[#a89080]">Total payé</span>
-                        <span className="font-black text-lg text-[#e5e2e1]">{formatCurrency(card.price)}</span>
+                        <span className="text-xs text-cc-text-secondary">Total payé</span>
+                        <span className="font-black text-lg text-cc-text-primary">{formatCurrency(card.price)}</span>
                       </div>
                     </div>
 
@@ -492,12 +470,10 @@ export function PaymentOverlay({ card, onClose }: PaymentOverlayProps) {
                       onClick={handleValidateWhatsApp}
                       className="w-full h-14 bg-gradient-to-r from-green-600 to-green-700 text-white font-bold text-base rounded-2xl hover:from-green-700 hover:to-green-800 shadow-lg shadow-green-500/20 transition-all duration-300"
                     >
-                      <MessageCircle className="w-5 h-5 mr-2" />
                       Valider via WhatsApp
-                      <ArrowRight className="w-5 h-5 ml-2" />
                     </Button>
 
-                    <p className="text-[11px] text-[#a89080] text-center mt-3">
+                    <p className="text-[11px] text-cc-text-secondary text-center mt-3">
                       Vous serez redirigé vers WhatsApp pour confirmer votre achat et recevoir votre code gratté
                     </p>
                   </motion.div>
@@ -512,28 +488,17 @@ export function PaymentOverlay({ card, onClose }: PaymentOverlayProps) {
                     transition={{ duration: 0.4 }}
                     className="text-center py-6"
                   >
-                    {/* Confetti-style sparkle */}
-                    <motion.div
-                      initial={{ scale: 0, rotate: -10 }}
-                      animate={{ scale: 1, rotate: 0 }}
-                      transition={{ type: 'spring', stiffness: 200, damping: 12 }}
-                      className="w-24 h-24 rounded-full bg-gradient-to-br from-green-500/20 to-green-600/10 border-2 border-green-500/30 flex items-center justify-center mx-auto mb-5"
-                    >
-                      <Sparkles className="w-12 h-12 text-green-400" />
-                    </motion.div>
-
                     <h4 className="text-2xl font-black gradient-text mb-2">Merci !</h4>
-                    <p className="text-[#a89080] mb-6">
+                    <p className="text-cc-text-secondary mb-6">
                       Votre achat a été enregistré avec succès. Notre équipe vous livrera le code sous peu via WhatsApp.
                     </p>
 
                     {/* Info box */}
                     <div className="rounded-2xl bg-[#1a1a1a] border border-white/[0.06] p-4 mb-6 text-left">
                       <div className="flex items-center gap-3 mb-3">
-                        <Phone className="w-4 h-4 text-green-400" />
-                        <span className="text-sm font-semibold text-[#e5e2e1]">Prochaine étape</span>
+                        <span className="text-sm font-semibold text-cc-text-primary">Prochaine étape</span>
                       </div>
-                      <p className="text-sm text-[#a89080]">
+                      <p className="text-sm text-cc-text-secondary">
                         Envoyez le message WhatsApp qui s&apos;est ouvert et attendez la réponse de notre équipe. 
                         Votre code sera livré dans les plus brefs délais.
                       </p>
@@ -541,14 +506,14 @@ export function PaymentOverlay({ card, onClose }: PaymentOverlayProps) {
 
                     {/* Contact info */}
                     <div className="rounded-xl bg-cc-blue/5 border border-cc-blue/10 p-3 mb-6">
-                      <p className="text-xs text-[#a89080]">
+                      <p className="text-xs text-cc-text-secondary">
                         Besoin d&apos;aide ? Contactez-nous : <span className="text-cc-blue font-semibold">{WHATSAPP_NUMBER}</span>
                       </p>
                     </div>
 
                     <Button
                       onClick={onClose}
-                      className="w-full h-12 bg-[#1a1a1a] border border-white/[0.08] text-[#e5e2e1] font-semibold rounded-xl hover:bg-[#222] transition-colors"
+                      className="w-full h-12 bg-[#1a1a1a] border border-white/[0.08] text-cc-text-primary font-semibold rounded-xl hover:bg-[#222] transition-colors"
                     >
                       Fermer
                     </Button>
@@ -561,18 +526,15 @@ export function PaymentOverlay({ card, onClose }: PaymentOverlayProps) {
             {step !== 'success' && (
               <div className="px-5 py-3 border-t border-white/[0.04] bg-[#0d0d0d] flex items-center justify-center gap-4">
                 <div className="flex items-center gap-1.5">
-                  <Shield className="w-3.5 h-3.5 text-[#a89080]/50" />
-                  <span className="text-[10px] text-[#a89080]/50">Sécurisé</span>
+                  <span className="text-[10px] text-cc-text-secondary/50">Sécurisé</span>
                 </div>
-                <div className="w-1 h-1 rounded-full bg-[#a89080]/20" />
+                <div className="w-1 h-1 rounded-full bg-cc-text-secondary/20" />
                 <div className="flex items-center gap-1.5">
-                  <Lock className="w-3.5 h-3.5 text-[#a89080]/50" />
-                  <span className="text-[10px] text-[#a89080]/50">Chiffré</span>
+                  <span className="text-[10px] text-cc-text-secondary/50">Chiffré</span>
                 </div>
-                <div className="w-1 h-1 rounded-full bg-[#a89080]/20" />
+                <div className="w-1 h-1 rounded-full bg-cc-text-secondary/20" />
                 <div className="flex items-center gap-1.5">
-                  <MessageCircle className="w-3.5 h-3.5 text-[#a89080]/50" />
-                  <span className="text-[10px] text-[#a89080]/50">WhatsApp</span>
+                  <span className="text-[10px] text-cc-text-secondary/50">WhatsApp</span>
                 </div>
               </div>
             )}

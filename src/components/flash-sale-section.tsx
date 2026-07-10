@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Zap, ShoppingCart, Timer, Package, Truck, Heart, Eye } from 'lucide-react'
+import { Heart } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -12,13 +12,13 @@ import { formatCurrency } from '@/lib/commissions'
 // CATEGORY COLORS
 // ==========================================
 const CATEGORY_COLORS: Record<string, string> = {
-  general: 'bg-gray-500/15 text-gray-500 dark:text-gray-400',
-  electronics: 'bg-blue-500/15 text-blue-600 dark:text-blue-400',
-  fashion: 'bg-pink-500/15 text-pink-600 dark:text-pink-400',
-  phone: 'bg-cyan-500/15 text-cyan-600 dark:text-cyan-400',
-  food: 'bg-green-500/15 text-green-600 dark:text-green-400',
-  beauty: 'bg-purple-500/15 text-purple-600 dark:text-purple-400',
-  home: 'bg-amber-500/15 text-amber-600 dark:text-amber-400',
+  general: 'bg-cc-text-secondary/15 text-cc-text-secondary',
+  electronics: 'bg-cc-blue/15 text-cc-blue dark:text-cc-blue/80',
+  fashion: 'bg-cc-orange/15 text-cc-orange dark:text-cc-orange/80',
+  phone: 'bg-cc-blue/15 text-cc-blue dark:text-cc-blue/80',
+  food: 'bg-cc-yellow/15 text-cc-yellow dark:text-cc-yellow/80',
+  beauty: 'bg-cc-orange/15 text-cc-orange dark:text-cc-orange/80',
+  home: 'bg-cc-yellow/15 text-cc-yellow dark:text-cc-yellow/80',
   other: 'bg-white/10 text-cc-text-secondary',
 }
 
@@ -93,7 +93,6 @@ function CountdownTimer({ targetDate, compact = false }: { targetDate: string | 
 
   return (
     <div className="flex items-center gap-1.5">
-      <Timer className="w-3.5 h-3.5 text-red-500 dark:text-red-400" />
       <div className="flex items-center gap-1">
         {units.map((unit, i) => (
           <React.Fragment key={unit.label}>
@@ -203,11 +202,9 @@ export function FlashSaleSection({ onBuyProduct, onSeeMore }: FlashSaleSectionPr
           viewport={{ once: true }}
         >
           <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-cc-surface-container border border-red-500/20 rounded-full mb-4">
-            <Zap className="w-4 h-4 text-red-500 dark:text-red-400" />
             <span className="text-[11px] uppercase tracking-widest text-red-500 dark:text-red-400 font-medium">Vente Flash</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-black text-cc-text-primary mb-3 flex items-center justify-center gap-2">
-            <Zap className="w-6 h-6 text-red-500 dark:text-red-400" />
             Vente Flash
           </h2>
           <div className="flex items-center justify-center gap-3">
@@ -215,7 +212,6 @@ export function FlashSaleSection({ onBuyProduct, onSeeMore }: FlashSaleSectionPr
               Offres limitées, ne ratez pas ces promotions exclusives !
             </p>
             <Badge className="bg-green-500/10 text-green-700 dark:text-green-400 border-green-500/20 text-[10px] gap-1">
-              <Truck className="w-3 h-3" />
               Paiement à la livraison
             </Badge>
           </div>
@@ -277,7 +273,7 @@ export function FlashSaleSection({ onBuyProduct, onSeeMore }: FlashSaleSectionPr
                       />
                     ) : (
                       <div className="w-full min-h-[220px] flex items-center justify-center">
-                        <Package className="w-16 h-16 text-cc-text-secondary/20" />
+                        <span className="text-cc-text-secondary/20 font-bold uppercase tracking-tighter text-2xl">Class Center</span>
                       </div>
                     )}
                     {/* Category badge - top-left of image area */}
@@ -293,7 +289,6 @@ export function FlashSaleSection({ onBuyProduct, onSeeMore }: FlashSaleSectionPr
                     {product.featured && (
                       <div className="absolute top-3 right-3 z-20">
                         <Badge className="bg-gradient-to-r from-red-500 to-orange-500 text-white text-[10px] font-bold tracking-wide shadow-lg shadow-red-500/30 border-0">
-                          <Zap className="w-3 h-3 mr-0.5" />
                           Flash
                         </Badge>
                       </div>
@@ -301,7 +296,7 @@ export function FlashSaleSection({ onBuyProduct, onSeeMore }: FlashSaleSectionPr
 
                     {/* Discount badge - below flash badge */}
                     {hasDiscount && (
-                      <div className={`absolute ${product.featured ? 'top-12' : 'top-3'} right-3 z-20`}>
+                      <div className={`absolute ${product.featured ? 'top-10' : 'top-3'} right-3 z-20`}>
                         <Badge className="bg-red-500/90 text-white text-[10px] font-bold shadow-lg border-0">
                           -{discountPercent}%
                         </Badge>
@@ -352,10 +347,9 @@ export function FlashSaleSection({ onBuyProduct, onSeeMore }: FlashSaleSectionPr
 
                     {/* Acheter button */}
                     <Button
-                      className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white h-11 btn-glow-orange font-bold text-base rounded-xl group-hover:shadow-lg transition-all duration-300"
+                      className="w-full bg-gradient-to-r from-cc-orange to-cc-orange/90 text-white h-11 btn-glow-orange font-bold text-base rounded-xl group-hover:shadow-lg transition-all duration-300"
                       onClick={() => onBuyProduct(product)}
                     >
-                      <ShoppingCart className="w-4 h-4 mr-2" />
                       Acheter
                     </Button>
                   </div>
@@ -379,7 +373,6 @@ export function FlashSaleSection({ onBuyProduct, onSeeMore }: FlashSaleSectionPr
               className="border-cc-border text-cc-text-primary hover:bg-cc-surface-container-high hover:border-cc-orange/30 px-8 h-12 text-base gap-2 rounded-xl"
               onClick={onSeeMore}
             >
-              <Eye className="w-4 h-4" />
               Voir plus de produits
               <Badge className="bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20 text-[10px] ml-1">
                 {products.length}

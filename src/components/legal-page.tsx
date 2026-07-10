@@ -118,7 +118,7 @@ const LEGAL_CONTENT: Record<string, { title: string; content: React.ReactNode }>
             <li>Contactez-nous rapidement via WhatsApp pour toute demande d&apos;annulation</li>
           </ul>
         </div>
-        <div className="p-4 bg-red-500/5 rounded-xl border border-red-500/20">
+        <div className="p-4 bg-red-500/5 dark:bg-red-500/10 rounded-xl border border-red-500/20">
           <p className="text-xs text-cc-text-secondary">
             Important : La politique de non-retour s&apos;applique à tous les produits numériques et physiques vendus sur CLASS CENTER, conformément aux lois de consommation applicables en Côte d&apos;Ivoire.
           </p>

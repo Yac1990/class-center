@@ -3,8 +3,7 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  X, Search, Zap, ShoppingCart, Package, Heart, Timer, SlidersHorizontal,
-  ArrowUpDown, ChevronDown,
+  X, Search, Zap, Heart, ArrowUpDown, ChevronDown,
 } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -15,14 +14,15 @@ import { formatCurrency } from '@/lib/commissions'
 // ==========================================
 // CATEGORY CONFIG
 // ==========================================
+// Category display helpers
 const CATEGORY_COLORS: Record<string, string> = {
-  general: 'bg-gray-500/15 text-gray-500 dark:text-gray-400',
-  electronics: 'bg-blue-500/15 text-blue-600 dark:text-blue-400',
-  fashion: 'bg-pink-500/15 text-pink-600 dark:text-pink-400',
-  phone: 'bg-cyan-500/15 text-cyan-600 dark:text-cyan-400',
-  food: 'bg-green-500/15 text-green-600 dark:text-green-400',
-  beauty: 'bg-purple-500/15 text-purple-600 dark:text-purple-400',
-  home: 'bg-amber-500/15 text-amber-600 dark:text-amber-400',
+  general: 'bg-cc-surface-container-high text-cc-text-secondary',
+  electronics: 'bg-cc-blue/15 text-cc-blue',
+  fashion: 'bg-cc-orange/15 text-cc-orange',
+  phone: 'bg-cc-blue/15 text-cc-blue',
+  food: 'bg-cc-yellow/15 text-cc-yellow',
+  beauty: 'bg-cc-orange/15 text-cc-orange',
+  home: 'bg-cc-yellow/15 text-cc-yellow',
   other: 'bg-white/10 text-cc-text-secondary',
 }
 
@@ -76,8 +76,8 @@ function CountdownTimer({ targetDate, compact = false }: { targetDate: string | 
       <div className="flex items-center gap-1">
         {units.map((unit, i) => (
           <React.Fragment key={unit.label}>
-            {i > 0 && <span className="text-red-500/50 dark:text-red-400/50 text-[9px]">:</span>}
-            <span className="bg-red-500/15 text-red-600 dark:text-red-400 text-[10px] font-bold px-1 py-0.5 rounded min-w-[20px] text-center inline-block">
+            {i > 0 && <span className="text-cc-orange/50 text-[9px]">:</span>}
+            <span className="bg-cc-orange/15 text-cc-orange text-[10px] font-bold px-1 py-0.5 rounded min-w-[20px] text-center inline-block">
               {unit.value}{unit.label}
             </span>
           </React.Fragment>
@@ -88,12 +88,11 @@ function CountdownTimer({ targetDate, compact = false }: { targetDate: string | 
 
   return (
     <div className="flex items-center gap-1.5">
-      <Timer className="w-3.5 h-3.5 text-red-500 dark:text-red-400" />
       <div className="flex items-center gap-1">
         {units.map((unit, i) => (
           <React.Fragment key={unit.label}>
-            {i > 0 && <span className="text-red-500/50 dark:text-red-400/50 text-xs">:</span>}
-            <span className="bg-red-500/15 text-red-600 dark:text-red-400 text-xs font-bold px-1.5 py-0.5 rounded-md min-w-[26px] text-center inline-block">
+            {i > 0 && <span className="text-cc-orange/50 text-xs">:</span>}
+            <span className="bg-cc-orange/15 text-cc-orange text-xs font-bold px-1.5 py-0.5 rounded-md min-w-[26px] text-center inline-block">
               {unit.value}{unit.label}
             </span>
           </React.Fragment>
@@ -225,9 +224,9 @@ export function FlashCatalogOverlay({ onClose, onBuyProduct }: FlashCatalogOverl
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-14">
             <div className="flex items-center gap-2">
-              <Zap className="w-5 h-5 text-red-500 dark:text-red-400" />
+              <Zap className="w-5 h-5 text-cc-orange" />
               <h1 className="text-lg font-black text-cc-text-primary">Vente Flash</h1>
-              <Badge className="bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20 text-[10px]">
+              <Badge className="bg-cc-orange/10 text-cc-orange border-cc-orange/20 text-[10px]">
                 {filteredProducts.length} produit{filteredProducts.length !== 1 ? 's' : ''}
               </Badge>
             </div>
@@ -333,7 +332,6 @@ export function FlashCatalogOverlay({ onClose, onBuyProduct }: FlashCatalogOverl
           </div>
         ) : filteredProducts.length === 0 ? (
           <div className="text-center py-20">
-            <Package className="w-16 h-16 text-cc-text-secondary/20 mx-auto mb-4" />
             <h3 className="text-lg font-bold text-cc-text-primary mb-2">Aucun produit trouvé</h3>
             <p className="text-sm text-cc-text-secondary mb-4">
               {searchQuery ? `Aucun résultat pour "${searchQuery}"` : 'Aucun produit dans cette catégorie'}
@@ -380,7 +378,6 @@ export function FlashCatalogOverlay({ onClose, onBuyProduct }: FlashCatalogOverl
                         />
                       ) : (
                         <div className="w-full min-h-[140px] flex items-center justify-center">
-                          <Package className="w-12 h-12 text-cc-text-secondary/20" />
                         </div>
                       )}
 
@@ -396,7 +393,7 @@ export function FlashCatalogOverlay({ onClose, onBuyProduct }: FlashCatalogOverl
                       {/* Discount badge */}
                       {hasDiscount && (
                         <div className="absolute top-2 right-2 z-20">
-                          <Badge className="bg-red-500/90 text-white text-[9px] font-bold shadow-lg border-0">
+                          <Badge className="bg-cc-orange text-white text-[9px] font-bold shadow-lg border-0">
                             -{discountPercent}%
                           </Badge>
                         </div>
@@ -426,7 +423,7 @@ export function FlashCatalogOverlay({ onClose, onBuyProduct }: FlashCatalogOverl
                         >
                           <Heart
                             className={`w-4 h-4 transition-colors ${
-                              likedProducts.has(product.id) ? 'fill-red-500 text-red-500' : 'text-cc-text-secondary/40 hover:text-red-400'
+                              likedProducts.has(product.id) ? 'fill-cc-orange text-cc-orange' : 'text-cc-text-secondary/40 hover:text-cc-orange'
                             }`}
                           />
                         </button>
@@ -437,10 +434,9 @@ export function FlashCatalogOverlay({ onClose, onBuyProduct }: FlashCatalogOverl
                       )}
 
                       <Button
-                        className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white h-9 btn-glow-orange font-bold text-xs sm:text-sm rounded-xl group-hover:shadow-lg transition-all duration-300 mt-auto"
+                        className="w-full bg-cc-orange text-white h-9 btn-glow-orange font-bold text-xs sm:text-sm rounded-xl group-hover:shadow-lg transition-all duration-300 mt-auto"
                         onClick={() => onBuyProduct(product)}
                       >
-                        <ShoppingCart className="w-3.5 h-3.5 mr-1.5" />
                         Acheter
                       </Button>
                     </div>

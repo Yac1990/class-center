@@ -2,52 +2,31 @@
 
 import React from 'react'
 import { motion, useInView } from 'framer-motion'
-import {
-  Smartphone,
-  CreditCard,
-  ShoppingCart,
-  Zap,
-  Wifi,
-  Printer,
-  ScanLine,
-  Layers,
-  FileText,
-  Camera,
-  MessageCircle,
-  Mail,
-  MapPin,
-  Users,
-  Award,
-  Target,
-  ArrowRight,
-  CheckCircle2,
-  Sparkles,
-} from 'lucide-react'
 import { WHATSAPP_NUMBER, WHATSAPP_LINK } from '@/lib/constants'
 
 // ==========================================
 // SERVICES DATA
 // ==========================================
 const digitalServices = [
-  { icon: Smartphone, label: 'Rechargement mobile & données', sublabel: 'tous opérateurs' },
-  { icon: CreditCard, label: 'Souscriptions forfaits', sublabel: '' },
-  { icon: ShoppingCart, label: 'Cartes physiques', sublabel: '' },
-  { icon: Zap, label: 'Vente Flash', sublabel: '' },
+  { label: 'Rechargement mobile & données', sublabel: 'tous opérateurs' },
+  { label: 'Souscriptions forfaits', sublabel: '' },
+  { label: 'Cartes physiques', sublabel: '' },
+  { label: 'Vente Flash', sublabel: '' },
 ]
 
 const bureauServices = [
-  { icon: Wifi, label: 'Cyberspace & accès internet', sublabel: '' },
-  { icon: Printer, label: 'Impression & photocopie', sublabel: '' },
-  { icon: ScanLine, label: 'Scan & numérisation', sublabel: '' },
-  { icon: Layers, label: 'Plastification & reliure', sublabel: '' },
-  { icon: FileText, label: 'Traitement de texte', sublabel: '' },
-  { icon: Camera, label: 'Photo minute', sublabel: 'passeport, identité' },
+  { label: 'Cyberspace & accès internet', sublabel: '' },
+  { label: 'Impression & photocopie', sublabel: '' },
+  { label: 'Scan & numérisation', sublabel: '' },
+  { label: 'Plastification & reliure', sublabel: '' },
+  { label: 'Traitement de texte', sublabel: '' },
+  { label: 'Photo minute', sublabel: 'passeport, identité' },
 ]
 
 const stats = [
-  { value: '5+', label: 'Années d\'expérience', icon: Award },
-  { value: '2000+', label: 'Clients satisfaits', icon: Users },
-  { value: '10K+', label: 'Transactions réussies', icon: Target },
+  { value: '5+', label: 'Années d\'expérience' },
+  { value: '2000+', label: 'Clients satisfaits' },
+  { value: '10K+', label: 'Transactions réussies' },
 ]
 
 const values = [
@@ -89,7 +68,7 @@ const fadeIn = {
 // ==========================================
 // ANIMATED COUNTER
 // ==========================================
-function AnimatedStat({ value, label, icon: Icon }: { value: string; label: string; icon: React.ElementType }) {
+function AnimatedStat({ value, label }: { value: string; label: string }) {
   const ref = React.useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-50px' })
 
@@ -101,9 +80,6 @@ function AnimatedStat({ value, label, icon: Icon }: { value: string; label: stri
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5 }}
     >
-      <div className="w-14 h-14 rounded-2xl bg-cc-orange/10 flex items-center justify-center mx-auto mb-3">
-        <Icon className="w-6 h-6 text-cc-orange" />
-      </div>
       <div className="text-3xl sm:text-4xl font-black gradient-text mb-1">{value}</div>
       <div className="text-sm text-cc-text-secondary font-medium">{label}</div>
     </motion.div>
@@ -113,7 +89,7 @@ function AnimatedStat({ value, label, icon: Icon }: { value: string; label: stri
 // ==========================================
 // SERVICE LIST ITEM
 // ==========================================
-function ServiceItem({ service, index }: { service: { icon: React.ElementType; label: string; sublabel: string }; index: number }) {
+function ServiceItem({ service, index }: { service: { label: string; sublabel: string }; index: number }) {
   const ref = React.useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-30px' })
 
@@ -125,14 +101,10 @@ function ServiceItem({ service, index }: { service: { icon: React.ElementType; l
       animate={isInView ? { opacity: 1, x: 0 } : {}}
       transition={{ duration: 0.4, delay: index * 0.06, ease: 'easeOut' }}
     >
-      <div className="w-9 h-9 rounded-lg bg-cc-orange/10 text-cc-orange flex items-center justify-center shrink-0 group-hover/item:bg-cc-orange/20 transition-colors">
-        <service.icon className="w-4 h-4" />
-      </div>
       <div className="flex-1 min-w-0">
         <span className="text-sm font-medium text-cc-text-primary block leading-snug">{service.label}</span>
         {service.sublabel && <span className="text-xs text-cc-text-secondary block mt-0.5">{service.sublabel}</span>}
       </div>
-      <ArrowRight className="w-4 h-4 text-cc-text-secondary/30 group-hover/item:text-cc-orange transition-all duration-300 group-hover/item:translate-x-1 shrink-0" />
     </motion.div>
   )
 }
@@ -149,12 +121,12 @@ export function AboutUsSection() {
       {/* Ambient background blobs */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <motion.div
-          className="absolute -top-32 right-0 w-80 h-80 bg-orange-500/5 rounded-full blur-[120px]"
+          className="absolute -top-32 right-0 w-80 h-80 bg-cc-orange/5 rounded-full blur-[120px]"
           animate={{ x: [0, 20, 0], y: [0, -15, 0] }}
           transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div
-          className="absolute -bottom-32 left-0 w-80 h-80 bg-blue-500/5 rounded-full blur-[120px]"
+          className="absolute -bottom-32 left-0 w-80 h-80 bg-cc-blue/5 rounded-full blur-[120px]"
           animate={{ x: [0, -20, 0], y: [0, 15, 0] }}
           transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
         />
@@ -344,7 +316,7 @@ export function AboutUsSection() {
               {/* Text below the photo */}
               <div className="px-5 sm:px-6 pt-2 pb-1">
                 <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-xl font-black text-white shadow-lg">
+                  <div className="w-11 h-11 rounded-full bg-gradient-to-br from-cc-orange to-cc-orange/90 flex items-center justify-center text-xl font-black text-white shadow-lg">
                     1
                   </div>
                   <h4 className="text-lg sm:text-xl font-bold text-cc-text-primary">Rechargement et services numériques</h4>
@@ -379,7 +351,7 @@ export function AboutUsSection() {
               {/* Text below the photo */}
               <div className="px-5 sm:px-6 pt-2 pb-1">
                 <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-br from-cc-blue to-blue-700 flex items-center justify-center text-xl font-black text-white shadow-lg">
+                  <div className="w-11 h-11 rounded-full bg-gradient-to-br from-cc-blue to-cc-blue/90 flex items-center justify-center text-xl font-black text-white shadow-lg">
                     2
                   </div>
                   <h4 className="text-lg sm:text-xl font-bold text-cc-text-primary">Centre informatique et bureautique</h4>
@@ -408,8 +380,8 @@ export function AboutUsSection() {
         >
           <div className="relative bg-cc-surface-container border border-cc-border rounded-2xl px-6 py-5 sm:px-10 sm:py-8 text-center overflow-hidden">
             {/* Decorative side accents */}
-            <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-orange-500 via-cc-blue to-orange-500 rounded-l-2xl" />
-            <div className="absolute right-0 top-0 bottom-0 w-1 bg-gradient-to-b from-cc-blue via-orange-500 to-cc-blue rounded-r-2xl" />
+            <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-cc-orange via-cc-blue to-cc-orange rounded-l-2xl" />
+            <div className="absolute right-0 top-0 bottom-0 w-1 bg-gradient-to-b from-cc-blue via-cc-orange to-cc-blue rounded-r-2xl" />
 
             <p className="text-sm sm:text-base lg:text-lg font-bold tracking-widest uppercase text-cc-text-primary leading-relaxed">
               <span className="text-cc-orange">Professionnalisme</span>
@@ -443,10 +415,6 @@ export function AboutUsSection() {
                 <p className="text-sm sm:text-base text-white/80 leading-relaxed mb-5">
                   Chaque membre de notre équipe est formé pour vous offrir un service impeccable. Votre satisfaction est notre priorité absolue.
                 </p>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-green-400" />
-                  <span className="text-sm text-white/90 font-medium">Équipe professionnelle et à l&apos;écoute</span>
-                </div>
               </div>
             </div>
           </div>
@@ -469,9 +437,6 @@ export function AboutUsSection() {
               rel="noopener noreferrer"
               className="flex items-center gap-3 p-4 rounded-xl bg-cc-surface-container border border-cc-border hover:border-green-500/30 hover:bg-green-500/[0.04] transition-all duration-300 group"
             >
-              <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center shrink-0 group-hover:bg-green-500/20 transition-colors">
-                <MessageCircle className="w-5 h-5 text-green-400" />
-              </div>
               <div className="min-w-0">
                 <p className="text-xs text-cc-text-secondary mb-0.5">WhatsApp</p>
                 <p className="text-sm font-semibold text-cc-text-primary truncate">{WHATSAPP_NUMBER}</p>
@@ -481,11 +446,8 @@ export function AboutUsSection() {
             {/* Email */}
             <a
               href="mailto:contact@classcenter.ci"
-              className="flex items-center gap-3 p-4 rounded-xl bg-cc-surface-container border border-cc-border hover:border-orange-500/30 hover:bg-orange-500/[0.04] transition-all duration-300 group"
+              className="flex items-center gap-3 p-4 rounded-xl bg-cc-surface-container border border-cc-border hover:border-cc-orange/30 hover:bg-cc-orange/[0.04] transition-all duration-300 group"
             >
-              <div className="w-10 h-10 rounded-full bg-orange-500/10 flex items-center justify-center shrink-0 group-hover:bg-orange-500/20 transition-colors">
-                <Mail className="w-5 h-5 text-orange-400" />
-              </div>
               <div className="min-w-0">
                 <p className="text-xs text-cc-text-secondary mb-0.5">Email</p>
                 <p className="text-sm font-semibold text-cc-text-primary truncate">contact@classcenter.ci</p>
@@ -494,9 +456,6 @@ export function AboutUsSection() {
 
             {/* Address */}
             <div className="flex items-center gap-3 p-4 rounded-xl bg-cc-surface-container border border-cc-border hover:border-cc-blue/30 hover:bg-cc-blue/[0.04] transition-all duration-300 group">
-              <div className="w-10 h-10 rounded-full bg-cc-blue/10 flex items-center justify-center shrink-0 group-hover:bg-cc-blue/20 transition-colors">
-                <MapPin className="w-5 h-5 text-blue-400" />
-              </div>
               <div className="min-w-0">
                 <p className="text-xs text-cc-text-secondary mb-0.5">Adresse</p>
                 <p className="text-sm font-semibold text-cc-text-primary">Abidjan, Côte d&apos;Ivoire</p>

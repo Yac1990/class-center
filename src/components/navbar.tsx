@@ -3,8 +3,7 @@
 import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  Smartphone, Menu, X, LogOut, Shield, UserCircle,
-  Home, User, Settings, Store, Sun, Moon,
+  Menu, X, LogOut, Sun, Moon,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
@@ -54,7 +53,7 @@ function ThemeToggle() {
             exit={{ rotate: -90, opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <Moon className="w-4 h-4 text-slate-600 group-hover:text-slate-800 transition-colors" />
+            <Moon className="w-4 h-4 text-cc-text-secondary group-hover:text-cc-text-primary transition-colors" />
           </motion.div>
         )}
       </AnimatePresence>
@@ -112,14 +111,14 @@ export function Navbar({ mobileMenuOpen, setMobileMenuOpen, loginOpen, setLoginO
                   onClick={() => { logout(); setActiveSection('home') }}
                   className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
                 >
-                  <LogOut className="w-4 h-4 mr-1" /> Déconnexion
+                  Déconnexion
                 </Button>
               </div>
             ) : (
               <Dialog open={loginOpen} onOpenChange={setLoginOpen}>
                 <DialogTrigger asChild>
-                  <Button className="ml-3 bg-cc-blue hover:bg-blue-600 text-white btn-glow">
-                    <UserCircle className="w-4 h-4 mr-1" /> Connexion
+                  <Button className="ml-3 bg-cc-blue hover:bg-cc-blue/90 text-white btn-glow">
+                    Connexion
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="bg-surface-container border-cc-border text-cc-text-primary">
@@ -134,12 +133,14 @@ export function Navbar({ mobileMenuOpen, setMobileMenuOpen, loginOpen, setLoginO
             <ThemeToggle />
             {user ? (
               <button className="p-2" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-                <UserCircle className="w-6 h-6 text-cc-text-secondary" />
+                <div className="w-6 h-6 rounded-full bg-cc-surface-container-highest flex items-center justify-center text-[10px] font-bold text-cc-text-secondary">
+                  {user.name?.[0]?.toUpperCase()}
+                </div>
               </button>
             ) : (
               <Dialog open={loginOpen} onOpenChange={setLoginOpen}>
                 <DialogTrigger asChild>
-                  <Button size="sm" className="bg-cc-blue hover:bg-blue-600 text-white btn-glow h-8 text-xs">
+                  <Button size="sm" className="bg-cc-blue hover:bg-cc-blue/90 text-white btn-glow h-8 text-xs">
                     Connexion
                   </Button>
                 </DialogTrigger>
@@ -165,14 +166,12 @@ export function Navbar({ mobileMenuOpen, setMobileMenuOpen, loginOpen, setLoginO
             >
               <div className="py-3 space-y-1">
                 <MobileNavButton
-                  icon={Home}
                   label="Accueil"
                   description="Page principale"
                   active={activeSection === 'home'}
                   onClick={() => { setActiveSection('home'); setMobileMenuOpen(false) }}
                 />
                 <MobileNavButton
-                  icon={User}
                   label="Espace Client"
                   description="Recharger & souscrire"
                   active={activeSection === 'client'}
@@ -180,7 +179,6 @@ export function Navbar({ mobileMenuOpen, setMobileMenuOpen, loginOpen, setLoginO
                 />
                 {user && isAdmin && (
                   <MobileNavButton
-                    icon={Settings}
                     label="Administration"
                     description="Gérer le site"
                     active={activeSection === 'admin'}
@@ -189,7 +187,6 @@ export function Navbar({ mobileMenuOpen, setMobileMenuOpen, loginOpen, setLoginO
                 )}
                 {user && isCabineManager && (
                   <MobileNavButton
-                    icon={Store}
                     label="Ma Cabine"
                     description="Gérer ma cabine"
                     active={activeSection === 'cabine'}
@@ -215,14 +212,14 @@ export function Navbar({ mobileMenuOpen, setMobileMenuOpen, loginOpen, setLoginO
                       className="text-red-400 hover:text-red-300 hover:bg-red-500/10 shrink-0 h-8"
                       onClick={() => { logout(); setActiveSection('home'); setMobileMenuOpen(false) }}
                     >
-                      <LogOut className="w-4 h-4" />
+                      Déconnexion
                     </Button>
                   </div>
                 ) : (
                   <Dialog open={loginOpen} onOpenChange={setLoginOpen}>
                     <DialogTrigger asChild>
                       <Button className="w-full bg-cc-blue text-white btn-glow h-11">
-                        <Shield className="w-4 h-4 mr-2" /> Connexion
+                        Connexion
                       </Button>
                     </DialogTrigger>
                     <DialogContent className="bg-surface-container border-cc-border text-cc-text-primary">
@@ -254,8 +251,7 @@ function NavButton({ label, active, onClick }: { label: string; active: boolean;
   )
 }
 
-function MobileNavButton({ icon: Icon, label, description, active, onClick }: {
-  icon: React.ComponentType<{ className?: string }>
+function MobileNavButton({ label, description, active, onClick }: {
   label: string
   description: string
   active: boolean
@@ -270,14 +266,7 @@ function MobileNavButton({ icon: Icon, label, description, active, onClick }: {
           : 'hover:bg-cc-surface-container-high border border-transparent'
       }`}
     >
-      <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
-        active
-          ? 'bg-cc-blue/20 text-cc-blue'
-          : 'bg-cc-surface-container-high text-cc-text-secondary'
-      }`}>
-        <Icon className="w-4 h-4" />
-      </div>
-      <div className="text-left min-w-0">
+      <div className="text-left min-w-0 flex-1">
         <p className={`text-sm font-semibold ${active ? 'text-cc-blue' : 'text-cc-text-primary'}`}>{label}</p>
         <p className="text-[11px] text-cc-text-secondary">{description}</p>
       </div>

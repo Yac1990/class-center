@@ -3,8 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import {
-  Phone, Users, CreditCard, BarChart3, Settings, TrendingUp,
-  Smartphone, Palette, Wallet, RefreshCw, Plus, Check, X, Copy,
+  Check, X, Copy,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -70,8 +69,8 @@ export function CabineManagerDashboard({ token }: { token: string }) {
 
   if (loading) {
     return (
-      <div className="pt-14 max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-4 bg-black min-h-screen">
-        {[1, 2, 3].map(i => <div key={i} className="h-28 rounded-xl bg-[#1a1a1a] animate-pulse" />)}
+      <div className="pt-14 max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-4 bg-cc-page-bg min-h-screen">
+        {[1, 2, 3].map(i => <div key={i} className="h-28 rounded-xl bg-cc-surface-container animate-pulse" />)}
       </div>
     )
   }
@@ -80,26 +79,26 @@ export function CabineManagerDashboard({ token }: { token: string }) {
   const s = dashboardData?.stats
 
   return (
-    <div className="pt-14 max-w-7xl mx-auto px-4 sm:px-6 py-8 bg-black min-h-screen">
+    <div className="pt-14 max-w-7xl mx-auto px-4 sm:px-6 py-8 bg-cc-page-bg min-h-screen">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-black text-[#e5e2e1]">
+            <h1 className="text-2xl sm:text-3xl font-black text-cc-text-primary">
               {manager?.businessName || 'Ma Cabine'}
             </h1>
-            <p className="text-[#a89080] text-sm">Bienvenue, {manager?.name}</p>
+            <p className="text-cc-text-secondary text-sm">Bienvenue, {manager?.name}</p>
           </div>
-          <Button variant="outline" size="sm" className="border-white/[0.06] text-[#a89080] hover:bg-white/5 hover:text-[#e5e2e1]" onClick={loadDashboard}>
-            <RefreshCw className="w-4 h-4 mr-1" /> Actualiser
+          <Button variant="outline" size="sm" className="border-cc-border text-cc-text-secondary hover:bg-cc-surface-container-high hover:text-cc-text-primary" onClick={loadDashboard}>
+            Actualiser
           </Button>
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="flex-wrap gap-1 mb-6 bg-[#1a1a1a] border border-white/[0.06]">
-            <TabsTrigger value="overview" className="data-[state=active]:bg-cc-blue data-[state=active]:text-white"><BarChart3 className="w-4 h-4 mr-1" /> Vue d&apos;ensemble</TabsTrigger>
-            <TabsTrigger value="settings" className="data-[state=active]:bg-cc-blue data-[state=active]:text-white"><Settings className="w-4 h-4 mr-1" /> Paramètres</TabsTrigger>
-            <TabsTrigger value="sim" className="data-[state=active]:bg-cc-blue data-[state=active]:text-white"><Smartphone className="w-4 h-4 mr-1" /> SIM</TabsTrigger>
-            <TabsTrigger value="wave" className="data-[state=active]:bg-cc-blue data-[state=active]:text-white"><Wallet className="w-4 h-4 mr-1" /> Wave</TabsTrigger>
+          <TabsList className="flex-wrap gap-1 mb-6 bg-cc-surface-container border border-cc-border">
+            <TabsTrigger value="overview" className="data-[state=active]:bg-cc-blue data-[state=active]:text-white">Vue d&apos;ensemble</TabsTrigger>
+            <TabsTrigger value="settings" className="data-[state=active]:bg-cc-blue data-[state=active]:text-white">Paramètres</TabsTrigger>
+            <TabsTrigger value="sim" className="data-[state=active]:bg-cc-blue data-[state=active]:text-white">SIM</TabsTrigger>
+            <TabsTrigger value="wave" className="data-[state=active]:bg-cc-blue data-[state=active]:text-white">Wave</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview">
@@ -129,10 +128,10 @@ function CabineOverview({ stats: s, dashboardData }: { stats: any; dashboardData
   if (!s) return null
 
   const statCards = [
-    { label: 'Recharges', value: s.totalRecharges || 0, sub: formatCurrency(s.totalRechargeAmount || 0), icon: Phone, color: 'text-primary-glow' },
-    { label: 'Commissions', value: formatCurrency(s.totalCommission || 0), sub: 'Vos gains', icon: TrendingUp, color: 'text-green-500' },
-    { label: 'Souscriptions', value: s.totalSubscriptions || 0, sub: formatCurrency(s.totalSubscriptionAmount || 0), icon: CreditCard, color: 'text-secondary-dim' },
-    { label: 'Clients', value: s.totalClients || 0, sub: `${s.pendingWavePayments || 0} paiements Wave en attente`, icon: Users, color: 'text-tertiary-dim' },
+    { label: 'Recharges', value: s.totalRecharges || 0, sub: formatCurrency(s.totalRechargeAmount || 0), color: 'text-cc-primary-glow' },
+    { label: 'Commissions', value: formatCurrency(s.totalCommission || 0), sub: 'Vos gains', color: 'text-green-500' },
+    { label: 'Souscriptions', value: s.totalSubscriptions || 0, sub: formatCurrency(s.totalSubscriptionAmount || 0), color: 'text-cc-secondary-dim' },
+    { label: 'Clients', value: s.totalClients || 0, sub: `${s.pendingWavePayments || 0} paiements Wave en attente`, color: 'text-cc-tertiary-dim' },
   ]
 
   return (
@@ -140,13 +139,12 @@ function CabineOverview({ stats: s, dashboardData }: { stats: any; dashboardData
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {statCards.map((c, i) => (
           <motion.div key={c.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
-            <div className="bento-cell bg-[#1a1a1a] border border-white/[0.06] p-5 rounded-2xl">
+            <div className="bento-cell bg-cc-surface-container border border-cc-border p-5 rounded-2xl">
               <div className="flex items-center gap-2 mb-2">
-                <c.icon className={`w-5 h-5 ${c.color}`} />
-                <span className="text-xs text-[#a89080]">{c.label}</span>
+                <span className="text-xs text-cc-text-secondary">{c.label}</span>
               </div>
-              <p className="text-2xl font-bold text-[#e5e2e1]">{c.value}</p>
-              <p className="text-xs text-[#a89080]">{c.sub}</p>
+              <p className="text-2xl font-bold text-cc-text-primary">{c.value}</p>
+              <p className="text-xs text-cc-text-secondary">{c.sub}</p>
             </div>
           </motion.div>
         ))}
@@ -154,8 +152,8 @@ function CabineOverview({ stats: s, dashboardData }: { stats: any; dashboardData
 
       {/* Recent activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="bg-[#1a1a1a] border border-white/[0.06] rounded-2xl">
-          <CardHeader><CardTitle className="text-base text-[#e5e2e1]">Dernières recharges</CardTitle></CardHeader>
+        <Card className="bg-cc-surface-container border border-cc-border rounded-2xl">
+          <CardHeader><CardTitle className="text-base text-cc-text-primary">Dernières recharges</CardTitle></CardHeader>
           <CardContent>
             <ScrollArea className="max-h-60">
               <div className="space-y-2">
@@ -165,17 +163,17 @@ function CabineOverview({ stats: s, dashboardData }: { stats: any; dashboardData
                       <Badge className={`${OPERATOR_INFO[r.operator]?.bg} ${OPERATOR_INFO[r.operator]?.color} text-xs`}>
                         {r.operator}
                       </Badge>
-                      <span className="text-sm text-[#e5e2e1]">{r.clientName}</span>
+                      <span className="text-sm text-cc-text-primary">{r.clientName}</span>
                     </div>
-                    <span className="text-sm font-bold text-[#e5e2e1]">{formatCurrency(r.amount)}</span>
+                    <span className="text-sm font-bold text-cc-text-primary">{formatCurrency(r.amount)}</span>
                   </div>
                 ))}
               </div>
             </ScrollArea>
           </CardContent>
         </Card>
-        <Card className="bg-[#1a1a1a] border border-white/[0.06] rounded-2xl">
-          <CardHeader><CardTitle className="text-base text-[#e5e2e1]">Dernières souscriptions</CardTitle></CardHeader>
+        <Card className="bg-cc-surface-container border border-cc-border rounded-2xl">
+          <CardHeader><CardTitle className="text-base text-cc-text-primary">Dernières souscriptions</CardTitle></CardHeader>
           <CardContent>
             <ScrollArea className="max-h-60">
               <div className="space-y-2">
@@ -185,9 +183,9 @@ function CabineOverview({ stats: s, dashboardData }: { stats: any; dashboardData
                       <Badge className={`${OPERATOR_INFO[sub.operator]?.bg} ${OPERATOR_INFO[sub.operator]?.color} text-xs`}>
                         {sub.operator}
                       </Badge>
-                      <span className="text-sm text-[#e5e2e1]">{sub.planName}</span>
+                      <span className="text-sm text-cc-text-primary">{sub.planName}</span>
                     </div>
-                    <span className="text-sm font-bold text-[#e5e2e1]">{formatCurrency(sub.amount)}</span>
+                    <span className="text-sm font-bold text-cc-text-primary">{formatCurrency(sub.amount)}</span>
                   </div>
                 ))}
               </div>
@@ -206,27 +204,26 @@ function CabineTheme({ theme, setTheme, businessName, setBusinessName, waveNumbe
   onSave: () => void
 }) {
   return (
-    <Card className="max-w-lg bg-[#1a1a1a] border border-white/[0.06] rounded-2xl">
+    <Card className="max-w-lg bg-cc-surface-container border border-cc-border rounded-2xl">
       <CardHeader>
-        <CardTitle className="text-base flex items-center gap-2 text-[#e5e2e1]">
-          <Palette className="w-5 h-5 text-cc-blue" />
+        <CardTitle className="text-base flex items-center gap-2 text-cc-text-primary">
           Personnaliser ma cabine
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="space-y-2">
-          <Label className="text-[#a89080]">Nom du commerce</Label>
-          <Input value={businessName} onChange={e => setBusinessName(e.target.value)} placeholder="Nom de votre commerce" className="bg-[#222222] border-white/[0.06] text-[#e5e2e1] placeholder:text-[#a89080]/50" />
+          <Label className="text-cc-text-secondary">Nom du commerce</Label>
+          <Input value={businessName} onChange={e => setBusinessName(e.target.value)} placeholder="Nom de votre commerce" className="bg-cc-surface-container-high border-cc-border text-cc-text-primary placeholder:text-cc-text-secondary/50" />
         </div>
 
         <div className="space-y-2">
-          <Label className="text-[#a89080]">Numéro Wave</Label>
-          <Input value={waveNumber} onChange={e => setWaveNumber(e.target.value)} placeholder="01XXXXXXXX" className="bg-[#222222] border-white/[0.06] text-[#e5e2e1] placeholder:text-[#a89080]/50" />
-          <p className="text-xs text-[#a89080]">Ce numéro sera affiché aux clients pour les paiements Wave</p>
+          <Label className="text-cc-text-secondary">Numéro Wave</Label>
+          <Input value={waveNumber} onChange={e => setWaveNumber(e.target.value)} placeholder="01XXXXXXXX" className="bg-cc-surface-container-high border-cc-border text-cc-text-primary placeholder:text-cc-text-secondary/50" />
+          <p className="text-xs text-cc-text-secondary">Ce numéro sera affiché aux clients pour les paiements Wave</p>
         </div>
 
         <div className="space-y-2">
-          <Label className="text-[#a89080]">Thème</Label>
+          <Label className="text-cc-text-secondary">Thème</Label>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {THEME_OPTIONS.map(t => (
               <button
@@ -234,21 +231,21 @@ function CabineTheme({ theme, setTheme, businessName, setBusinessName, waveNumbe
                 type="button"
                 onClick={() => setTheme(t.id)}
                 className={`p-3 rounded-xl border-2 transition-smooth text-left ${
-                  theme === t.id ? 'border-cc-blue shadow-md shadow-cc-blue/20' : 'border-white/[0.06] hover:border-cc-blue/30 bg-[#222222]'
+                  theme === t.id ? 'border-cc-blue shadow-md shadow-cc-blue/20' : 'border-cc-border hover:border-cc-blue/30 bg-cc-surface-container-high'
                 }`}
               >
                 <div className="flex gap-1 mb-2">
                   <div className="w-4 h-4 rounded-full" style={{ backgroundColor: t.primary }} />
                   <div className="w-4 h-4 rounded-full" style={{ backgroundColor: t.secondary }} />
                 </div>
-                <p className="text-sm font-medium text-[#e5e2e1]">{t.name}</p>
+                <p className="text-sm font-medium text-cc-text-primary">{t.name}</p>
               </button>
             ))}
           </div>
         </div>
 
-        <Button className="w-full bg-cc-blue hover:bg-blue-600 text-white btn-glow" onClick={onSave}>
-          <Settings className="w-4 h-4 mr-2" /> Sauvegarder les paramètres
+        <Button className="w-full bg-cc-blue hover:bg-cc-blue/90 text-white btn-glow" onClick={onSave}>
+          Sauvegarder les paramètres
         </Button>
       </CardContent>
     </Card>
@@ -385,10 +382,9 @@ function CabineSIMManagement({ cabineId, simBalances, onRefresh }: { cabineId: s
 
   return (
     <div className="space-y-6">
-      <Card className="bg-[#1a1a1a] border border-white/[0.06] rounded-2xl">
+      <Card className="bg-cc-surface-container border border-cc-border rounded-2xl">
         <CardHeader>
-          <CardTitle className="text-base flex items-center gap-2 text-[#e5e2e1]">
-            <Smartphone className="w-5 h-5 text-cc-blue" />
+          <CardTitle className="text-base flex items-center gap-2 text-cc-text-primary">
             Ajouter une puce SIM
           </CardTitle>
         </CardHeader>
@@ -396,8 +392,8 @@ function CabineSIMManagement({ cabineId, simBalances, onRefresh }: { cabineId: s
           <form onSubmit={handleAddSim} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <Select value={operator} onValueChange={setOperator}>
-                <SelectTrigger className="bg-[#222222] border-white/[0.06] text-[#e5e2e1]"><SelectValue placeholder="Opérateur" /></SelectTrigger>
-                <SelectContent className="bg-[#1a1a1a] border-white/[0.06]">
+                <SelectTrigger className="bg-cc-surface-container-high border-cc-border text-cc-text-primary"><SelectValue placeholder="Opérateur" /></SelectTrigger>
+                <SelectContent className="bg-cc-surface-container border-cc-border">
                   <SelectItem value="ORANGE">Orange</SelectItem>
                   <SelectItem value="MTN">MTN</SelectItem>
                   <SelectItem value="MOOV">Moov</SelectItem>
@@ -409,16 +405,16 @@ function CabineSIMManagement({ cabineId, simBalances, onRefresh }: { cabineId: s
                   onChange={e => handlePhoneInput(e.target.value)}
                   placeholder="07 XX XX XX XX"
                   required
-                  className="bg-[#222222] border-white/[0.06] text-[#e5e2e1] placeholder:text-[#a89080]/50 font-mono tracking-wider"
+                  className="bg-cc-surface-container-high border-cc-border text-cc-text-primary placeholder:text-cc-text-secondary/50 font-mono tracking-wider"
                 />
-                <p className="text-[10px] text-[#a89080]/60">Format automatique</p>
+                <p className="text-[10px] text-cc-text-secondary/60">Format automatique</p>
               </div>
-              <Button type="submit" className="bg-cc-blue hover:bg-blue-600 text-white btn-glow" disabled={loading}>
-                {loading ? 'Ajout...' : <><Plus className="w-4 h-4 mr-1" /> Ajouter</>}
+              <Button type="submit" className="bg-cc-blue hover:bg-cc-blue/90 text-white btn-glow" disabled={loading}>
+                {loading ? 'Ajout...' : 'Ajouter'}
               </Button>
             </div>
             <div className="space-y-1">
-              <Label className="text-[#a89080]">Numéros de transaction / codes de recharge</Label>
+              <Label className="text-cc-text-secondary">Numéros de transaction / codes de recharge</Label>
               <Input
                 value={transactionNumbers}
                 onChange={e => {
@@ -430,17 +426,17 @@ function CabineSIMManagement({ cabineId, simBalances, onRefresh }: { cabineId: s
                   setTransactionNumbers(formatted)
                 }}
                 placeholder="Ex: 1234-5678-9012, 9876-5432-1098"
-                className="bg-[#222222] border-white/[0.06] text-[#e5e2e1] placeholder:text-[#a89080]/50 font-mono tracking-wider"
+                className="bg-cc-surface-container-high border-cc-border text-cc-text-primary placeholder:text-cc-text-secondary/50 font-mono tracking-wider"
               />
-              <p className="text-[10px] text-[#a89080]/60">Séparez les codes par des virgules. Séparateurs automatiques.</p>
+              <p className="text-[10px] text-cc-text-secondary/60">Séparez les codes par des virgules. Séparateurs automatiques.</p>
             </div>
           </form>
         </CardContent>
       </Card>
 
-      <Card className="bg-[#1a1a1a] border border-white/[0.06] rounded-2xl">
+      <Card className="bg-cc-surface-container border border-cc-border rounded-2xl">
         <CardHeader>
-          <CardTitle className="text-base text-[#e5e2e1]">Solde des puces SIM</CardTitle>
+          <CardTitle className="text-base text-cc-text-primary">Solde des puces SIM</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
@@ -456,38 +452,38 @@ function CabineSIMManagement({ cabineId, simBalances, onRefresh }: { cabineId: s
                       </Badge>
                       <div>
                         <div className="flex items-center gap-1.5">
-                          <p className="text-sm font-mono font-medium text-[#e5e2e1] tracking-wide">{formattedPhone}</p>
+                          <p className="text-sm font-mono font-medium text-cc-text-primary tracking-wide">{formattedPhone}</p>
                           <button
                             onClick={() => handleCopyTx(sim.phoneNumber)}
-                            className="p-0.5 hover:bg-white/5 rounded transition-smooth"
+                            className="p-0.5 hover:bg-cc-surface-container-high rounded transition-smooth"
                             title="Copier le numéro"
                           >
-                            {copiedTx === sim.phoneNumber ? <Check className="w-3 h-3 text-green-400" /> : <Copy className="w-3 h-3 text-[#a89080]" />}
+                            {copiedTx === sim.phoneNumber ? <Check className="w-3 h-3 text-green-400" /> : <Copy className="w-3 h-3 text-cc-text-secondary" />}
                           </button>
                         </div>
-                        <p className="text-xs text-[#a89080]">Solde: <strong className="text-green-500">{formatCurrency(sim.balance)}</strong></p>
+                        <p className="text-xs text-cc-text-secondary">Solde: <strong className="text-green-500">{formatCurrency(sim.balance)}</strong></p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Input type="number" placeholder="Montant" className="w-24 h-8 text-sm bg-[#222222] border-white/[0.06] text-[#e5e2e1] placeholder:text-[#a89080]/50" value={amount} onChange={e => setAmount(e.target.value)} />
-                      <Button size="sm" variant="outline" className="border-white/[0.06] text-[#a89080] hover:bg-white/5" onClick={() => handleRechargeSim(sim.id)}>
-                        <RefreshCw className="w-3 h-3" />
+                      <Input type="number" placeholder="Montant" className="w-24 h-8 text-sm bg-cc-surface-container-high border-cc-border text-cc-text-primary placeholder:text-cc-text-secondary/50" value={amount} onChange={e => setAmount(e.target.value)} />
+                      <Button size="sm" variant="outline" className="border-cc-border text-cc-text-secondary hover:bg-cc-surface-container-high" onClick={() => handleRechargeSim(sim.id)}>
+                        Actualiser
                       </Button>
                     </div>
                   </div>
 
                   {/* Transaction numbers */}
                   {txNumbers.length > 0 && (
-                    <div className="mt-2 p-2 rounded-lg bg-[#1a1a1a] border border-white/[0.04]">
-                      <p className="text-[10px] uppercase tracking-widest text-[#a89080] mb-1.5">Numéros de transaction</p>
+                    <div className="mt-2 p-2 rounded-lg bg-cc-surface-container border border-white/[0.04]">
+                      <p className="text-[10px] uppercase tracking-widest text-cc-text-secondary mb-1.5">Numéros de transaction</p>
                       <div className="flex flex-wrap gap-1.5">
                         {txNumbers.map((code: string, idx: number) => {
                           const formattedCode = formatTransactionCode(code)
                           return (
-                            <div key={idx} className="group flex items-center gap-1 px-2 py-1 rounded-md bg-[#2a2a2a] border border-white/[0.06] hover:border-cc-blue/30 transition-smooth">
+                            <div key={idx} className="group flex items-center gap-1 px-2 py-1 rounded-md bg-cc-surface-container-high border border-cc-border hover:border-cc-blue/30 transition-smooth">
                               <span className="text-xs font-mono font-bold text-cc-blue tracking-wider">{formattedCode}</span>
-                              <button onClick={() => handleCopyTx(code)} className="opacity-60 group-hover:opacity-100 p-0.5 hover:bg-white/5 rounded transition-smooth" title="Copier">
-                                {copiedTx === code ? <Check className="w-2.5 h-2.5 text-green-400" /> : <Copy className="w-2.5 h-2.5 text-[#a89080]" />}
+                              <button onClick={() => handleCopyTx(code)} className="opacity-60 group-hover:opacity-100 p-0.5 hover:bg-cc-surface-container-high rounded transition-smooth" title="Copier">
+                                {copiedTx === code ? <Check className="w-2.5 h-2.5 text-green-400" /> : <Copy className="w-2.5 h-2.5 text-cc-text-secondary" />}
                               </button>
                               <button onClick={() => handleDeleteTxNumber(sim.id, code)} className="opacity-60 group-hover:opacity-100 p-0.5 hover:bg-red-500/10 rounded transition-smooth" title="Supprimer">
                                 <X className="w-2.5 h-2.5 text-red-400" />
@@ -506,15 +502,15 @@ function CabineSIMManagement({ cabineId, simBalances, onRefresh }: { cabineId: s
                         value={newTxNumber}
                         onChange={e => handleTxNumberInput(e.target.value)}
                         placeholder="1234-5678-9012"
-                        className="flex-1 h-8 text-sm bg-[#222222] border-white/[0.06] text-[#e5e2e1] placeholder:text-[#a89080]/50 font-mono tracking-wider"
+                        className="flex-1 h-8 text-sm bg-cc-surface-container-high border-cc-border text-cc-text-primary placeholder:text-cc-text-secondary/50 font-mono tracking-wider"
                         onKeyDown={e => {
                           if (e.key === 'Enter') { e.preventDefault(); handleAddTxNumber(sim.id) }
                         }}
                       />
-                      <Button size="sm" className="bg-cc-blue hover:bg-blue-600 text-white h-8 text-xs" onClick={() => handleAddTxNumber(sim.id)}>
-                        <Plus className="w-3 h-3" />
+                      <Button size="sm" className="bg-cc-blue hover:bg-cc-blue/90 text-white h-8 text-xs" onClick={() => handleAddTxNumber(sim.id)}>
+                        Valider
                       </Button>
-                      <Button size="sm" variant="ghost" className="text-[#a89080] h-8" onClick={() => { setShowTxInput(null); setNewTxNumber('') }}>
+                      <Button size="sm" variant="ghost" className="text-cc-text-secondary h-8" onClick={() => { setShowTxInput(null); setNewTxNumber('') }}>
                         <X className="w-3 h-3" />
                       </Button>
                     </div>
@@ -525,14 +521,14 @@ function CabineSIMManagement({ cabineId, simBalances, onRefresh }: { cabineId: s
                       className="border-cc-blue/20 text-cc-blue hover:bg-cc-blue/10 h-7 text-xs mt-2"
                       onClick={() => setShowTxInput(sim.id)}
                     >
-                      <Plus className="w-3 h-3 mr-1" /> Ajouter numéro
+                      Ajouter numéro
                     </Button>
                   )}
                 </div>
               )
             })}
             {(!simBalances || simBalances.length === 0) && (
-              <p className="text-center text-[#a89080] py-4">Aucune puce SIM enregistrée</p>
+              <p className="text-center text-cc-text-secondary py-4">Aucune puce SIM enregistrée</p>
             )}
           </div>
         </CardContent>
@@ -573,14 +569,13 @@ function CabineWavePayments({ cabineId, onRefresh }: { cabineId: string; onRefre
   }
 
   if (loading) {
-    return <div className="h-40 rounded-xl bg-[#1a1a1a] animate-pulse" />
+    return <div className="h-40 rounded-xl bg-cc-surface-container animate-pulse" />
   }
 
   return (
-    <Card className="bg-[#1a1a1a] border border-white/[0.06] rounded-2xl">
+    <Card className="bg-cc-surface-container border border-cc-border rounded-2xl">
       <CardHeader>
-        <CardTitle className="text-base flex items-center gap-2 text-[#e5e2e1]">
-          <Wallet className="w-5 h-5 text-cc-blue" />
+        <CardTitle className="text-base flex items-center gap-2 text-cc-text-primary">
           Paiements Wave
         </CardTitle>
       </CardHeader>
@@ -590,18 +585,18 @@ function CabineWavePayments({ cabineId, onRefresh }: { cabineId: string; onRefre
             {payments.map((p: any) => (
               <div key={p.id} className="flex items-center justify-between py-2 border-b border-white/[0.04] last:border-0">
                 <div>
-                  <p className="font-medium text-sm text-[#e5e2e1]">{p.clientName}</p>
-                  <p className="text-xs text-[#a89080]">{p.clientPhone} — {new Date(p.createdAt).toLocaleDateString('fr-FR')}</p>
+                  <p className="font-medium text-sm text-cc-text-primary">{p.clientName}</p>
+                  <p className="text-xs text-cc-text-secondary">{p.clientPhone} — {new Date(p.createdAt).toLocaleDateString('fr-FR')}</p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="font-bold text-sm text-[#e5e2e1]">{formatCurrency(p.amount)}</span>
+                  <span className="font-bold text-sm text-cc-text-primary">{formatCurrency(p.amount)}</span>
                   {p.status === 'PENDING' ? (
                     <div className="flex gap-1">
                       <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white h-7 text-xs" onClick={() => handleConfirm(p.id, 'CONFIRMED')}>
-                        <Check className="w-3 h-3" />
+                        Confirmer
                       </Button>
                       <Button size="sm" variant="destructive" className="h-7 text-xs" onClick={() => handleConfirm(p.id, 'CANCELLED')}>
-                        <X className="w-3 h-3" />
+                        Annuler
                       </Button>
                     </div>
                   ) : (
@@ -613,7 +608,7 @@ function CabineWavePayments({ cabineId, onRefresh }: { cabineId: string; onRefre
               </div>
             ))}
             {payments.length === 0 && (
-              <p className="text-center text-[#a89080] py-4">Aucun paiement Wave pour le moment</p>
+              <p className="text-center text-cc-text-secondary py-4">Aucun paiement Wave pour le moment</p>
             )}
           </div>
         </ScrollArea>

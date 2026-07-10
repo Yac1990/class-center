@@ -3,8 +3,7 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  X, ShoppingCart, Minus, Plus, Trash2, Truck, CreditCard,
-  Package, Phone, MapPin, User, Loader2,
+  X, Minus, Plus, Trash2, Loader2,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -212,7 +211,6 @@ export function CartOverlay() {
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b" style={{ borderColor: 'var(--cc-border-subtle)' }}>
             <div className="flex items-center gap-2">
-              <ShoppingCart className="w-5 h-5 text-cc-orange" />
               <h2 className="text-lg font-bold" style={{ color: 'var(--cc-text-primary)' }}>Mon Panier</h2>
               <Badge className="bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20 text-xs">
                 {cart.length} article{cart.length > 1 ? 's' : ''}
@@ -231,7 +229,6 @@ export function CartOverlay() {
             <div className="flex-1 overflow-y-auto p-4 space-y-3">
               {cart.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-12">
-                  <ShoppingCart className="w-16 h-16 mb-4" style={{ color: 'var(--cc-text-secondary)', opacity: 0.3 }} />
                   <p className="text-cc-text-secondary text-sm">Votre panier est vide</p>
                   <Button
                     variant="outline"
@@ -470,7 +467,6 @@ export function CartOverlay() {
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
                   <>
-                    {onlyCardItems ? <CreditCard className="w-5 h-5 mr-2" /> : <Truck className="w-5 h-5 mr-2" />}
                     {onlyCardItems ? 'Payer' : 'Confirmer la commande'} - {formatCurrency(finalTotal)}
                   </>
                 )}
@@ -501,7 +497,6 @@ export function CartOverlay() {
                 <>
                   <div className="w-full p-4 rounded-xl mb-4 space-y-3" style={{ backgroundColor: 'var(--cc-surface-container-high)' }}>
                     <div className="flex items-center gap-2">
-                      <CreditCard className="w-4 h-4" style={{ color: 'var(--cc-text-secondary)' }} />
                       <span className="text-xs font-medium" style={{ color: 'var(--cc-text-secondary)' }}>Étapes suivantes :</span>
                     </div>
                     <div className="space-y-2">
@@ -522,7 +517,6 @@ export function CartOverlay() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm mb-2 w-full justify-center transition-colors"
                   >
-                    <CreditCard className="w-4 h-4" />
                     Payer via {paymentMethod === 'DJAMO' ? 'Djamo' : 'Wave'}
                   </a>
                   {/* WhatsApp button with pre-filled message */}
@@ -532,7 +526,6 @@ export function CartOverlay() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold text-sm mb-4 w-full justify-center transition-colors"
                   >
-                    <Phone className="w-4 h-4" />
                     Recevoir mes codes via WhatsApp
                   </a>
                 </>
@@ -571,12 +564,10 @@ function CartItemRow({ item, onUpdateQuantity, onRemove }: {
         {item.imageUrl ? (
           <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover" />
         ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            {item.type === 'flash' ? (
-              <Package className="w-6 h-6" style={{ color: 'var(--cc-text-secondary)', opacity: 0.3 }} />
-            ) : (
-              <CreditCard className="w-6 h-6" style={{ color: 'var(--cc-text-secondary)', opacity: 0.3 }} />
-            )}
+          <div className="w-full h-full flex items-center justify-center bg-cc-surface-container-high">
+            <span className="text-[10px] text-cc-text-secondary/50 font-bold uppercase tracking-tighter">
+              {item.type === 'flash' ? 'Flash' : 'Carte'}
+            </span>
           </div>
         )}
       </div>
@@ -648,8 +639,7 @@ export function FloatingCartButton() {
       className="fixed bottom-6 left-6 z-40 flex items-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-cc-orange to-orange-600 text-white font-semibold shadow-lg hover:shadow-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-300 group"
       aria-label="Ouvrir le panier"
     >
-      <ShoppingCart className="w-5 h-5 group-hover:animate-bounce" />
-      <span className="text-sm hidden sm:inline">Panier</span>
+      <span className="text-sm">Panier</span>
       {count > 0 && (
         <Badge className="bg-white text-cc-orange font-bold text-xs min-w-[1.5rem] h-6 flex items-center justify-center rounded-full">
           {count}

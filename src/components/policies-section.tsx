@@ -3,12 +3,6 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import {
-  Shield, RotateCcw, FileText, Scale, Mail, ChevronRight,
-  Lock, Eye, Cookie, UserCheck, Smartphone, PackageCheck,
-  AlertTriangle, Ban, Clock, CreditCard, Truck, Gavel,
-  Globe, Building2, MessageCircle
-} from 'lucide-react'
-import {
   Accordion,
   AccordionContent,
   AccordionItem,
@@ -23,21 +17,18 @@ import { WHATSAPP_NUMBER } from '@/lib/constants'
 // SUB-SECTION COMPONENT
 // ==========================================
 function PolicySubSection({
-  icon: Icon,
   title,
   children,
 }: {
-  icon: React.ElementType
   title: string
   children: React.ReactNode
 }) {
   return (
     <div className="mb-5 last:mb-0">
       <div className="flex items-center gap-2 mb-2">
-        <Icon className="w-4 h-4 text-cc-orange shrink-0" />
         <h4 className="text-sm font-semibold text-cc-text-primary">{title}</h4>
       </div>
-      <div className="pl-6 text-sm text-cc-text-secondary leading-relaxed space-y-1.5">
+      <div className="text-sm text-cc-text-secondary leading-relaxed space-y-1.5">
         {children}
       </div>
     </div>
@@ -92,9 +83,6 @@ function NewsletterCapture() {
     <div className="mt-10">
       <div className="bg-cc-surface-container border border-cc-border rounded-2xl p-6 sm:p-8">
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-4">
-          <div className="w-10 h-10 rounded-xl bg-cc-orange/10 flex items-center justify-center shrink-0">
-            <Mail className="w-5 h-5 text-cc-orange" />
-          </div>
           <div>
             <h3 className="font-bold text-cc-text-primary text-base">Restez informé</h3>
             <p className="text-sm text-cc-text-secondary mt-0.5">
@@ -118,7 +106,7 @@ function NewsletterCapture() {
           <Button
             type="submit"
             disabled={status === 'loading' || status === 'success'}
-            className="h-11 px-5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg btn-glow-orange shrink-0"
+            className="h-11 px-5 bg-cc-orange hover:bg-cc-orange/90 text-white font-semibold rounded-lg btn-glow-orange shrink-0"
           >
             {status === 'loading' ? (
               <span className="flex items-center gap-2">
@@ -127,13 +115,11 @@ function NewsletterCapture() {
               </span>
             ) : status === 'success' ? (
               <span className="flex items-center gap-1.5">
-                <PackageCheck className="w-4 h-4" />
                 <span className="hidden sm:inline">Inscrit !</span>
               </span>
             ) : (
               <span className="flex items-center gap-1.5">
                 <span className="hidden sm:inline">S&apos;inscrire</span>
-                <ChevronRight className="w-4 h-4" />
               </span>
             )}
           </Button>
@@ -193,7 +179,6 @@ export function PoliciesSection() {
           variants={sectionVariants}
         >
           <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-cc-surface-container border border-cc-border rounded-full mb-4">
-            <Scale className="w-3.5 h-3.5 text-cc-orange" />
             <span className="text-[11px] uppercase tracking-widest text-cc-text-secondary font-medium">Transparence & Confiance</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-black text-cc-text-primary mb-3">
@@ -219,11 +204,8 @@ export function PoliciesSection() {
                 className="bg-cc-surface-container border border-cc-border rounded-2xl px-5 sm:px-6 overflow-hidden data-[state=open]:border-cc-orange/30 transition-colors"
               >
                 <AccordionTrigger className="py-5 hover:no-underline group">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-cc-orange/10 flex items-center justify-center shrink-0 group-data-[state=open]:bg-cc-orange/20 transition-colors">
-                      <Shield className="w-4.5 h-4.5 text-cc-orange" />
-                    </div>
-                    <div className="text-left">
+                  <div className="flex items-center gap-3 text-left">
+                    <div>
                       <span className="font-bold text-cc-text-primary text-sm sm:text-base">Politique de confidentialité</span>
                       <span className="block text-xs text-cc-text-secondary">Protection et gestion de vos données personnelles</span>
                     </div>
@@ -232,39 +214,39 @@ export function PoliciesSection() {
                 <AccordionContent className="pb-6">
                   <Separator className="mb-5 bg-cc-border" />
 
-                  <PolicySubSection icon={Eye} title="Collecte de données">
+                  <PolicySubSection title="Collecte de données">
                     <PolicyBullet>Nom complet et numéro de téléphone pour le traitement des commandes</PolicyBullet>
                     <PolicyBullet>Informations de paiement (Wave, Djamo) nécessaires aux transactions</PolicyBullet>
                     <PolicyBullet>Adresse de livraison pour les produits physiques (Vente Flash)</PolicyBullet>
                     <PolicyBullet>Adresse e-mail pour la newsletter et les communications (optionnel)</PolicyBullet>
                   </PolicySubSection>
 
-                  <PolicySubSection icon={Lock} title="Utilisation des données">
+                  <PolicySubSection title="Utilisation des données">
                     <PolicyBullet>Traitement et suivi de vos commandes (recharges, souscriptions, cartes)</PolicyBullet>
                     <PolicyBullet>Amélioration continue de nos services et de votre expérience utilisateur</PolicyBullet>
                     <PolicyBullet>Envoi de notifications liées à vos commandes en cours</PolicyBullet>
                     <PolicyBullet>Communications promotionnelles avec votre consentement préalable</PolicyBullet>
                   </PolicySubSection>
 
-                  <PolicySubSection icon={Shield} title="Protection des données">
+                  <PolicySubSection title="Protection des données">
                     <PolicyBullet>Transactions sécurisées via les plateformes officielles Wave et Djamo</PolicyBullet>
                     <PolicyBullet>Aucune donnée bancaire n&apos;est stockée sur nos serveurs</PolicyBullet>
                     <PolicyBullet>Accès restreint aux données personnelles, uniquement par le personnel autorisé</PolicyBullet>
                   </PolicySubSection>
 
-                  <PolicySubSection icon={Ban} title="Partage des données">
+                  <PolicySubSection title="Partage des données">
                     <PolicyBullet>Aucun partage de vos données personnelles à des tiers sans votre consentement explicite</PolicyBullet>
                     <PolicyBullet>Les données de paiement sont traitées directement par les plateformes de paiement sécurisées</PolicyBullet>
                     <PolicyBullet>Données partagées uniquement si requis par la loi en vigueur</PolicyBullet>
                   </PolicySubSection>
 
-                  <PolicySubSection icon={Cookie} title="Cookies et technologies similaires">
+                  <PolicySubSection title="Cookies et technologies similaires">
                     <PolicyBullet>Utilisation de cookies essentiels au bon fonctionnement du site</PolicyBullet>
                     <PolicyBullet>Cookies d&apos;analyse pour comprendre l&apos;utilisation du site et améliorer nos services</PolicyBullet>
                     <PolicyBullet>Vous pouvez désactiver les cookies dans les paramètres de votre navigateur</PolicyBullet>
                   </PolicySubSection>
 
-                  <PolicySubSection icon={UserCheck} title="Droits des utilisateurs">
+                  <PolicySubSection title="Droits des utilisateurs">
                     <PolicyBullet><strong>Droit d&apos;accès</strong> — Consultez les données personnelles que nous détenons</PolicyBullet>
                     <PolicyBullet><strong>Droit de modification</strong> — Corrigez vos informations à tout moment</PolicyBullet>
                     <PolicyBullet><strong>Droit de suppression</strong> — Demandez la suppression de vos données personnelles</PolicyBullet>
@@ -273,7 +255,6 @@ export function PoliciesSection() {
 
                   <div className="mt-5 p-3 bg-cc-surface-container-high rounded-xl border border-cc-border">
                     <div className="flex items-center gap-2">
-                      <Mail className="w-4 h-4 text-cc-orange shrink-0" />
                       <span className="text-sm text-cc-text-secondary">
                         Contact : <a href="mailto:classcenter.ci@gmail.com" className="text-cc-orange hover:underline font-medium">classcenter.ci@gmail.com</a>
                       </span>
@@ -291,11 +272,8 @@ export function PoliciesSection() {
                 className="bg-cc-surface-container border border-cc-border rounded-2xl px-5 sm:px-6 overflow-hidden data-[state=open]:border-red-500/30 transition-colors"
               >
                 <AccordionTrigger className="py-5 hover:no-underline group">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-red-500/10 flex items-center justify-center shrink-0 group-data-[state=open]:bg-red-500/20 transition-colors">
-                      <RotateCcw className="w-4.5 h-4.5 text-red-500" />
-                    </div>
-                    <div className="text-left">
+                  <div className="flex items-center gap-3 text-left">
+                    <div>
                       <span className="font-bold text-cc-text-primary text-sm sm:text-base">Politique de non-retour</span>
                       <span className="block text-xs text-cc-text-secondary">Conditions de retour et d&apos;échange</span>
                     </div>
@@ -304,26 +282,26 @@ export function PoliciesSection() {
                 <AccordionContent className="pb-6">
                   <Separator className="mb-5 bg-cc-border" />
 
-                  <PolicySubSection icon={Smartphone} title="Produits numériques (recharges & souscriptions)">
+                  <PolicySubSection title="Produits numériques (recharges & souscriptions)">
                     <PolicyBullet>Les recharges et souscriptions sont livrées instantanément par code ou crédit direct</PolicyBullet>
                     <PolicyBullet><strong className="text-cc-text-primary">Aucun retour possible</strong> une fois le produit livré et le code communiqué</PolicyBullet>
                     <PolicyBullet>La livraison est considérée comme effective dès l&apos;envoi du code par WhatsApp ou SMS</PolicyBullet>
                   </PolicySubSection>
 
-                  <PolicySubSection icon={AlertTriangle} title="Vente Flash — Produits physiques">
+                  <PolicySubSection title="Vente Flash — Produits physiques">
                     <PolicyBullet>Paiement à la livraison uniquement (aucun paiement anticipé requis)</PolicyBullet>
                     <PolicyBullet><strong className="text-cc-text-primary">Aucun retour possible</strong> après confirmation de la livraison par le client</PolicyBullet>
                     <PolicyBullet>Vérifiez soigneusement votre commande lors de la réception avant de confirmer</PolicyBullet>
                   </PolicySubSection>
 
-                  <PolicySubSection icon={PackageCheck} title="Produits défectueux">
+                  <PolicySubSection title="Produits défectueux">
                     <PolicyBullet>Remplacement possible dans les <strong className="text-cc-text-primary">48 heures</strong> suivant la livraison</PolicyBullet>
                     <PolicyBullet>Preuve obligatoire : photo ou vidéo du défaut envoyée via WhatsApp</PolicyBullet>
                     <PolicyBullet>Le remplacement est effectué après validation par notre équipe</PolicyBullet>
                     <PolicyBullet>Aucun remboursement, uniquement un échange contre un produit identique</PolicyBullet>
                   </PolicySubSection>
 
-                  <PolicySubSection icon={Clock} title="Annulation de commande">
+                  <PolicySubSection title="Annulation de commande">
                     <PolicyBullet>L&apos;annulation est possible <strong className="text-cc-text-primary">uniquement avant l&apos;expédition</strong> du produit</PolicyBullet>
                     <PolicyBullet>Pour les produits numériques : annulation impossible une fois le code généré</PolicyBullet>
                     <PolicyBullet>Contactez-nous rapidement via WhatsApp pour toute demande d&apos;annulation</PolicyBullet>
@@ -331,7 +309,6 @@ export function PoliciesSection() {
 
                   <div className="mt-5 p-3 bg-red-500/5 dark:bg-red-500/10 rounded-xl border border-red-500/20">
                     <div className="flex items-start gap-2">
-                      <AlertTriangle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
                       <span className="text-xs text-cc-text-secondary">
                         Important : La politique de non-retour s&apos;applique à tous les produits numériques et physiques vendus sur CLASS CENTER, conformément aux lois de consommation applicables en Côte d&apos;Ivoire.
                       </span>
@@ -349,11 +326,8 @@ export function PoliciesSection() {
                 className="bg-cc-surface-container border border-cc-border rounded-2xl px-5 sm:px-6 overflow-hidden data-[state=open]:border-cc-blue/30 transition-colors"
               >
                 <AccordionTrigger className="py-5 hover:no-underline group">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-cc-blue/10 flex items-center justify-center shrink-0 group-data-[state=open]:bg-cc-blue/20 transition-colors">
-                      <FileText className="w-4.5 h-4.5 text-cc-blue" />
-                    </div>
-                    <div className="text-left">
+                  <div className="flex items-center gap-3 text-left">
+                    <div>
                       <span className="font-bold text-cc-text-primary text-sm sm:text-base">Conditions générales de vente</span>
                       <span className="block text-xs text-cc-text-secondary">Règles et modalités d&apos;achat</span>
                     </div>
@@ -362,34 +336,34 @@ export function PoliciesSection() {
                 <AccordionContent className="pb-6">
                   <Separator className="mb-5 bg-cc-border" />
 
-                  <PolicySubSection icon={Gavel} title="Acceptation des conditions">
+                  <PolicySubSection title="Acceptation des conditions">
                     <PolicyBullet>Toute commande passée sur CLASS CENTER implique l&apos;acceptation pleine et entière des présentes conditions</PolicyBullet>
                     <PolicyBullet>Ces conditions prévalent sur tout autre document ou accord antérieur</PolicyBullet>
                     <PolicyBullet>CLASS CENTER se réserve le droit de modifier les CGV à tout moment</PolicyBullet>
                   </PolicySubSection>
 
-                  <PolicySubSection icon={CreditCard} title="Prix et paiement">
+                  <PolicySubSection title="Prix et paiement">
                     <PolicyBullet>Tous les prix sont indiqués en FCFA (Franc CFA)</PolicyBullet>
                     <PolicyBullet>Moyens de paiement acceptés : <strong className="text-cc-text-primary">Wave</strong> (via ordinateur) et <strong className="text-cc-text-primary">Djamo</strong> (via smartphone)</PolicyBullet>
                     <PolicyBullet>Le paiement est requis avant la livraison des produits numériques (recharges, souscriptions)</PolicyBullet>
                     <PolicyBullet>Pour les produits physiques (Vente Flash) : paiement à la livraison uniquement</PolicyBullet>
                   </PolicySubSection>
 
-                  <PolicySubSection icon={Truck} title="Livraison">
+                  <PolicySubSection title="Livraison">
                     <PolicyBullet><strong className="text-cc-text-primary">Produits numériques</strong> : livraison instantanée par WhatsApp ou SMS</PolicyBullet>
                     <PolicyBullet><strong className="text-cc-text-primary">Produits physiques</strong> : livraison à domicile avec paiement à la livraison</PolicyBullet>
                     <PolicyBullet>Délai de livraison indicatif : 24h à 72h selon la zone géographique (Abidjan et environs)</PolicyBullet>
                     <PolicyBullet>Le client doit vérifier le produit lors de la livraison avant confirmation</PolicyBullet>
                   </PolicySubSection>
 
-                  <PolicySubSection icon={Shield} title="Responsabilité">
+                  <PolicySubSection title="Responsabilité">
                     <PolicyBullet>CLASS CENTER s&apos;engage à fournir les produits et services commandés dans les meilleurs délais</PolicyBullet>
                     <PolicyBullet>En cas d&apos;indisponibilité, le client sera informé et pourra choisir entre un remboursement ou un produit équivalent</PolicyBullet>
                     <PolicyBullet>CLASS CENTER ne saurait être tenu responsable des retards dus à des cas de force majeure</PolicyBullet>
                     <PolicyBullet>La responsabilité de CLASS CENTER est limitée au montant de la commande</PolicyBullet>
                   </PolicySubSection>
 
-                  <PolicySubSection icon={Globe} title="Droit applicable">
+                  <PolicySubSection title="Droit applicable">
                     <PolicyBullet>Les présentes conditions sont régies par le droit <strong className="text-cc-text-primary">ivoirien</strong></PolicyBullet>
                     <PolicyBullet>Tout litige sera soumis aux tribunaux compétents d&apos;Abidjan, Côte d&apos;Ivoire</PolicyBullet>
                     <PolicyBullet>La langue de référence pour le règlement des litiges est le français</PolicyBullet>
@@ -406,11 +380,8 @@ export function PoliciesSection() {
                 className="bg-cc-surface-container border border-cc-border rounded-2xl px-5 sm:px-6 overflow-hidden data-[state=open]:border-cc-yellow/30 transition-colors"
               >
                 <AccordionTrigger className="py-5 hover:no-underline group">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-cc-yellow/10 flex items-center justify-center shrink-0 group-data-[state=open]:bg-cc-yellow/20 transition-colors">
-                      <Scale className="w-4.5 h-4.5 text-cc-yellow" />
-                    </div>
-                    <div className="text-left">
+                  <div className="flex items-center gap-3 text-left">
+                    <div>
                       <span className="font-bold text-cc-text-primary text-sm sm:text-base">Mentions légales</span>
                       <span className="block text-xs text-cc-text-secondary">Informations légales sur l&apos;éditeur du site</span>
                     </div>
@@ -419,7 +390,7 @@ export function PoliciesSection() {
                 <AccordionContent className="pb-6">
                   <Separator className="mb-5 bg-cc-border" />
 
-                  <PolicySubSection icon={Building2} title="Éditeur du site">
+                  <PolicySubSection title="Éditeur du site">
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
                         <span className="text-cc-text-secondary">Dénomination :</span>
@@ -436,7 +407,7 @@ export function PoliciesSection() {
                     </div>
                   </PolicySubSection>
 
-                  <PolicySubSection icon={MessageCircle} title="Contact">
+                  <PolicySubSection title="Contact">
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
                         <span className="text-cc-text-secondary">WhatsApp :</span>
@@ -458,7 +429,7 @@ export function PoliciesSection() {
                     </div>
                   </PolicySubSection>
 
-                  <PolicySubSection icon={Globe} title="Hébergement">
+                  <PolicySubSection title="Hébergement">
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
                         <span className="text-cc-text-secondary">Plateforme :</span>

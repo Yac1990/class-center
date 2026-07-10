@@ -3,8 +3,7 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  X, Package, Truck, Minus, Plus, ChevronLeft, ChevronRight,
-  ShoppingCart,
+  X, Minus, Plus, ChevronLeft, ChevronRight,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -147,7 +146,7 @@ export function FlashProductDetail({ product, onClose }: FlashProductDetailProps
                           key={i}
                           onClick={() => { setImageDirection(i > selectedImageIndex ? 'right' : 'left'); setSelectedImageIndex(i) }}
                           className={`w-12 h-12 rounded-lg overflow-hidden border-2 transition-all duration-200 flex items-center justify-center ${
-                            i === selectedImageIndex ? 'border-orange-500 shadow-lg shadow-orange-500/30' : 'border-white/10 opacity-60 hover:opacity-90'
+                            i === selectedImageIndex ? 'border-cc-orange shadow-lg shadow-cc-orange/30' : 'border-white/10 opacity-60 hover:opacity-90'
                           }`}
                           style={{ background: 'var(--cc-surface-container-high)' }}
                         >
@@ -159,7 +158,6 @@ export function FlashProductDetail({ product, onClose }: FlashProductDetailProps
                 </>
               ) : (
                 <div className="w-full min-h-[250px] sm:min-h-[400px] flex items-center justify-center">
-                  <Package className="w-20 h-20" style={{ color: 'var(--cc-text-secondary)', opacity: 0.2 }} />
                 </div>
               )}
             </div>
@@ -179,7 +177,6 @@ export function FlashProductDetail({ product, onClose }: FlashProductDetailProps
                     {product.category || 'Général'}
                   </Badge>
                   <Badge className="bg-green-500/10 text-green-700 dark:text-green-400 border-green-500/20 text-[10px] gap-1">
-                    <Truck className="w-3 h-3" />
                     Paiement à la livraison
                   </Badge>
                 </div>
@@ -193,7 +190,7 @@ export function FlashProductDetail({ product, onClose }: FlashProductDetailProps
                       <span className="text-lg line-through" style={{ color: 'var(--cc-text-secondary)', opacity: 0.5 }}>
                         {formatCurrency(product.originalPrice)}
                       </span>
-                      <Badge className="bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20 text-[10px] font-bold">
+                      <Badge className="bg-cc-orange/10 text-cc-orange border-cc-orange/20 text-[10px] font-bold">
                         -{discountPercent}%
                       </Badge>
                     </>
@@ -247,18 +244,16 @@ export function FlashProductDetail({ product, onClose }: FlashProductDetailProps
               <div className="space-y-3">
                 <Button
                   onClick={handleBuyNow}
-                  className="w-full h-14 bg-gradient-to-r from-green-600 to-green-700 text-white font-bold text-base rounded-2xl hover:from-green-700 hover:to-green-800 shadow-lg shadow-green-500/20 transition-all duration-300"
+                  className="w-full h-14 bg-cc-blue text-white font-bold text-base rounded-2xl hover:bg-cc-blue/90 shadow-lg shadow-cc-blue/20 transition-all duration-300"
                 >
-                  <Truck className="w-5 h-5 mr-2" />
                   Acheter maintenant - {formatCurrency(totalAmount)}
                 </Button>
 
                 <Button
                   onClick={handleAddToCart}
                   variant="outline"
-                  className="w-full h-12 border-cc-orange/30 text-cc-orange hover:bg-orange-500/10 font-bold text-base rounded-2xl"
+                  className="w-full h-12 border-cc-orange/30 text-cc-orange hover:bg-cc-orange/10 font-bold text-base rounded-2xl"
                 >
-                  <ShoppingCart className="w-5 h-5 mr-2" />
                   Ajouter au panier
                 </Button>
 
