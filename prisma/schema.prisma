@@ -27,9 +27,8 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -303,7 +302,7 @@ model FlashOrder {
   user    User?         @relation(fields: [userId], references: [id])
 
   @@index([productId])
-pourquoi   @@index([userId])
+  @@index([userId])
   @@index([status])
   @@index([createdAt])
 }
