@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import path from 'path';
+import { createClient } from '@supabase/supabase-js';
 
-const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10 Mo
-const MAX_DOCUMENT_SIZE = 100 * 1024 * 1024; // 100 Mo
+const MAX_IMAGE_SIZE = 10 * 1024 * 1024;
+const MAX_DOCUMENT_SIZE = 100 * 1024 * 1024;
 
 const IMAGE_MIME_TYPES = new Set([
   'image/jpeg',
@@ -21,12 +20,21 @@ function sanitizeFolder(folder: string): string {
 }
 
 function getExtension(filename: string): string {
-  const ext = path.extname(filename).toLowerCase();
+  const ext = filename.lastIndexOf('.') !== -1 ? filename.slice(filename.lastIndexOf('.')).toLowerCase() : '';
   return ext && /^\.[a-z0-9]+$/.test(ext) ? ext : '';
 }
 
 export async function POST(request: NextRequest) {
   try {
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!supabaseUrl || !supabaseServiceKey) {
+      return NextResponse.json({ error: 'Configuration stockage manquante' }, { status: 500 });
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
     const formData = await request.formData();
     const file = formData.get('file');
     const folderRaw = (formData.get('folder') as string) || 'misc';
@@ -53,26 +61,36 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads', folder);
-    await mkdir(uploadDir, { recursive: true });
-
     const ext = getExtension(file.name) || (file.type ? `.${file.type.split('/')[1]}` : '');
-    const uniqueName = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}${ext}`;
-    const filePath = path.join(uploadDir, uniqueName);
+    const uniqueName = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2, 10)}${ext}`;
 
     const buffer = Buffer.from(await file.arrayBuffer());
-    await writeFile(filePath, buffer);
 
-    const url = `/uploads/${folder}/${uniqueName}`;
+    const { error: uploadError } = await supabase.storage
+      .from('uploads')
+      .upload(uniqueName, buffer, {
+        contentType: file.type,
+        upsert: false,
+      });
+
+    if (uploadError) {
+      console.error('Supabase storage error:', uploadError);
+      return NextResponse.json({ error: `Erreur stockage: ${uploadError.message}` }, { status: 500 });
+    }
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('uploads')
+      .getPublicUrl(uniqueName);
 
     return NextResponse.json({
-      url,
+      url: publicUrl,
       name: file.name,
       size: file.size,
       type: file.type,
     });
   } catch (error) {
     console.error('Upload error:', error);
-    return NextResponse.json({ error: 'Erreur serveur lors du téléversement' }, { status: 500 });
+    const message = error instanceof Error ? error.message : String(error);
+    return NextResponse.json({ error: `Erreur serveur: ${message}` }, { status: 500 });
   }
 }

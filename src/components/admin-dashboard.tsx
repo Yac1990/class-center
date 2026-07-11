@@ -1042,7 +1042,7 @@ function AdminPublications({ publications, onRefresh }: { publications: any[]; o
                   </div>
                 )}
               </div>
-              {imageUrl && !imageUrl.startsWith('/uploads/') && (
+              {imageUrl && !imageUrl.includes('supabase.co/storage') && !imageUrl.startsWith('/uploads/') && (
                 <Input value={imageUrl} onChange={e => setImageUrl(e.target.value)} placeholder="Ou entrez une URL d'image" className="bg-[#222222] border-white/[0.06] text-[#e5e2e1] placeholder:text-[#a89080]/50 text-xs h-8" />
               )}
             </div>
@@ -2361,7 +2361,7 @@ function AdminPhysicalCards({ cards, sections, onRefresh }: { cards: any[]; sect
                       )}
                     </div>
                     <p className="text-[10px] text-[#a89080]/60">JPG, PNG, GIF ou WebP. Max 5MB.</p>
-                    {imageUrl && !imageUrl.startsWith('/uploads/') && (
+                    {imageUrl && !imageUrl.includes('supabase.co/storage') && !imageUrl.startsWith('/uploads/') && (
                       <Input value={imageUrl} onChange={e => setImageUrl(e.target.value)} placeholder="Ou entrez une URL" className="bg-[#222222] border-white/[0.06] text-[#e5e2e1] placeholder:text-[#a89080]/50 text-xs h-8" />
                     )}
                   </div>
@@ -2384,8 +2384,8 @@ function AdminPhysicalCards({ cards, sections, onRefresh }: { cards: any[]; sect
                     <img src={imageUrl} alt="Preview" className="w-16 h-16 rounded-lg object-cover" />
                     <div>
                       <span className="text-xs text-[#a89080]">Aperçu de la photo</span>
-                      {imageUrl.startsWith('/uploads/') && (
-                        <p className="text-[10px] text-green-400">✓ Image téléchargée depuis votre ordinateur</p>
+                      {(imageUrl.startsWith('/uploads/') || imageUrl.includes('supabase.co/storage')) && (
+                        <p className="text-[10px] text-green-400">✓ Image téléchargée</p>
                       )}
                     </div>
                   </div>
