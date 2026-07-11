@@ -14,6 +14,9 @@ const IMAGE_MIME_TYPES = new Set([
 
 const DOCUMENT_FOLDERS = new Set(['documents', 'documents-final']);
 
+// URL publique Supabase — pas un secret
+const SUPABASE_URL = 'https://rfartcpecaryvmwqvlka.supabase.co';
+
 function sanitizeFolder(folder: string): string {
   const safe = folder.replace(/[^a-zA-Z0-9_-]/g, '');
   return safe || 'misc';
@@ -26,14 +29,20 @@ function getExtension(filename: string): string {
 
 export async function POST(request: NextRequest) {
   try {
-    const supabaseUrl = process.env.SUPABASE_URL;
-    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    // Support plusieurs noms de variables (manuel ou intégration Vercel-Supabase)
+    const serviceKey =
+      process.env.SUPABASE_SERVICE_ROLE_KEY ||
+      process.env.SUPABASE_SECRET_KEY ||
+      process.env.SUPABASE_SERVICE_KEY;
 
-    if (!supabaseUrl || !supabaseServiceKey) {
-      return NextResponse.json({ error: 'Configuration stockage manquante' }, { status: 500 });
+    if (!serviceKey) {
+      return NextResponse.json(
+        { error: 'Variable SUPABASE_SERVICE_ROLE_KEY manquante dans Vercel' },
+        { status: 500 }
+      );
     }
 
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    const supabase = createClient(SUPABASE_URL, serviceKey);
 
     const formData = await request.formData();
     const file = formData.get('file');
