@@ -1,3 +1,0 @@
-- [Missing /api/upload route](missing-upload-route.md) — client upload UI existed everywhere but the route handler itself was never created; check route files exist, not just fetch() call sites.
-- [Main-agent git push workaround](git-push-workaround.md) — git commit/remote/push are blocked for the main agent; use GitHub's Git Data REST API from code_execution to push instead.
-- [Class Center brand palette](class-center-brand-palette.md) — site uses cc-orange/cc-yellow/cc-blue tokens; user wants decorative icons removed and ad-hoc colors (purple/indigo/emerald/etc.) unified to these tokens, semantic red/green kept only for real states.
